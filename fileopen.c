@@ -1,6 +1,12 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 void openfile(char *s) {
-	char st[16];
-	st[16] = "files/";
+	char *st;
+	st = (char *)malloc((sizeof(char)) * 7);
+	st = "files/";
 	strcat(s, ".txt");
 	FILE *list;
 	list = fopen("files/records", "a+");
@@ -22,13 +28,14 @@ void openfile(char *s) {
 	display();	
 }
 void searchfile(char *s) {
-	char st[16];
-	st[16] = "files/";
+	char *st;
+	st = (char *)malloc((sizeof(char)) * 7);
+	st = "files/";
 	strcat(s, ".txt");
 	strcat(st, s);
 	FILE *search;
 	search = fopen(st,"r");
-	if(file == NULL) {
+	if(search == NULL) {
 		perror("error :");
 		return;
 	}
@@ -38,7 +45,7 @@ void searchfile(char *s) {
         fread(&matchinfo, sizeof(matchinfo, 1, search);
 	main();
 }
-	
+
 	
 
 
