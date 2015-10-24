@@ -10,7 +10,7 @@ typedef struct batsman {
 typedef struct list {
 	batsmannode *head, *tail;
 	int count;
-}batsman
+}batsman;
 typedef struct bowler {
 	char name[16];
 	float overs;
@@ -23,7 +23,7 @@ typedef struct bowler {
 	float strikerate;
 	struct bowler *next;
 }bowlernode;
-typedef struct list {
+typedef struct listb {
 	bowlernode *head, *tail;
 	int count;
 }bowler;
@@ -55,6 +55,7 @@ void opennewfile(char *s);
 bowlernode *give_bowl(bowler *bowl, char *name);
 void searchfile(char *s);
 void shining_bowl(bowlernode *bowl);
+void start(team *overall);
 
 
 	

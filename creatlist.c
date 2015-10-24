@@ -1,3 +1,7 @@
+#include "main.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 void in_the_ground(batsman *bat) {
 	bat->head = NULL;
 	bat->tail = NULL;
@@ -5,7 +9,7 @@ void in_the_ground(batsman *bat) {
 }
 batsmannode *send_batsman(batsman *bat, char *name) {
 	batsmannode  *temp;
-	temp = (batsman *)malloc(sizeof(batsman));
+	temp = (batsmannode *)malloc(sizeof(batsman));
 	strcpy(temp->name, name);
 	if(bat->count == 0) {
 		bat->head = temp;
@@ -35,7 +39,7 @@ void warming_up(bowler *bowl) {
 }
 bowlernode *give_bowl(bowler *bowl, char *name) {
 	bowlernode  *temp;
-	temp = (bowler *)malloc(sizeof(bowler));
+	temp = (bowlernode *)malloc(sizeof(bowler));
 	strcpy(temp->name, name);
 	if(bowl->count == 0) {
 		bowl->head = temp;
@@ -61,25 +65,15 @@ void shining_bowl(bowlernode *bowl) {
 	bowl->economy = 0;
 	bowl->strikerate = 0;
 }
-bowlernode *searchbowler(bowler *bowl, char *name) {
-	bowlernode *temp;
-	temp = bowl->head;
-	while(temp){
-		if((strcmp(temp->name, name)) == 0)
-			return temp;
-		temp = temp->next;
-	}
-	return NULL;
-}
-start(team *overall) {
-	totalruns = 0;
-	overs = 0;
-	partnership = 0;
-	lastwicket = NULL;
-	extras = 0;
-	innings = 1;
-	WASPscore = 0;
-	runrate = 0;
+void start(team *overall) {
+	overall->totalruns = 0;
+	overall->overs = 0;
+	overall->partnership = 0;
+	overall->lastwicket = NULL;
+	overall->extras = 0;
+	overall->innings = 1;
+	overall->WASPscore = 0;
+	overall->runrate = 0;
 }
 	
 			
