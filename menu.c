@@ -1,5 +1,6 @@
 char menu() {
 	char ch;
+<<<<<<< HEAD
 	WINDOW *d;
 	initscr();
    	refresh();
@@ -18,6 +19,12 @@ char menu() {
 	getch();
         delwin(d);
     	endwin();
+=======
+	printf("\n\t\t\t\tMENU\t\t\t\n");
+	printf("\n   \t1. NEW SCORECARD \t\t\n");
+	printf("\n   \t1. OPEN SCORECARD \t\t\n");
+	printf("\n   \t1. BYE \t\t\n");
+>>>>>>> 45159530d3b52700a5c3f9a5bd89be6775fcd8c5
 	ch = getchar();
 	return ch;
 }
