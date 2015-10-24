@@ -75,7 +75,5 @@ void start(team *overall) {
 	overall->WASPscore = 0;
 	overall->runrate = 0;
 }
-	
-			
 			
 			
