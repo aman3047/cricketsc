@@ -9,32 +9,47 @@ void move(int x, int y) {
 void printbat(batsman *bat) {
 	batsmannode  *temp;
 	temp = bat->head;
+	int x = 16; 
 	while(temp) {
-		move()
+		move(0, x);
 		printf("%s", temp->name);
+		move(16, x);
 		printf("%d", temp->runs);
+		move(20, x);
 		printf("%d", temp->balls);
+		move(24, x);
 		printf("%d", temp->four);
+		move(28, x);
 		printf("%d", temp->six);
+		move(32, x);
 		printf("%f", temp->strikerate);
-		printf("\n");
 		temp = temp->next;
+		x++;
 	}
 } 
 void printbowl(bowler *bowl) {
 	bowlernode  *temp;
 	temp = bowl->head;
+	int x = 26;
 	while(temp) {
+		move(0, x);
 		printf("%s", temp->name);
+		move(16, x);
 		printf("%f", temp->overs);
+		move(20, x);
 		printf("%d", temp->runs);
+		move(24, x);
 		printf("%d", temp->wicket);
+		move(28, x);
 		printf("%d", temp->maidens);
+		move(32, x);
 		printf("%d", temp->extras);
+		move(36, x);
 		printf("%f", temp->economy);
+		move(40, x);
 		printf("%f", temp->strikerate);
-		printf("\n");
 		temp = temp->next;
+		x++;
 	}
 }
 char *date(){
