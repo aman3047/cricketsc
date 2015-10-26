@@ -50,6 +50,8 @@ char *date(){
 	return r;
 }
 void printinfo(matchinfo *info){
+	char *s;
+	s = (char *)malloc((sizeof(char)) * 16);
 	move(0, 5)
 	printf("series name: ");
 	move(13, 5);
@@ -76,6 +78,7 @@ void printinfo(matchinfo *info){
 	printf("umpire2 : ");
 	move(36, 9);
 	scanf("%[^\n]", info->umpire2);
+	free(s);
 } 			
 void display(batsman *team1, bowler *team2, matchinfo *info, team *overall) {
 	move(0,15);
