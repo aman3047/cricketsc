@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
+#include <stdlib.h>
 void move(int x, int y) {
 	printf("\033[%d;%df", y, x);
 	fflush(stdout);
@@ -47,51 +49,63 @@ char *date(){
 	strcpy(r, b);
 	return r;
 }
-printinfo(matchinfo *info){
-	printf("series name\n");
+void printinfo(matchinfo *info){
+	move(0, 5)
+	printf("series name: ");
+	move(13, 5);
 	scanf("%[^\n]", info->sname);
-	printf("toss \n");
+	move(30, 5);
+	printf("toss: ");
+	move(37, 5); 
 	scanf("%[^\n]", info->toss);
-	printf("venue \n");
+	move(0, 7);
+	printf("venue: ");
+	move(8, 7);
 	scanf("%[^\n]", info->venue);
-	printf("date :");
+	move(25, 7);
+	printf("date: ");
 	s = date();
-	strlen(info->date, s);
-	printf("umpire 1 : \n");
+	move(33, 7);
+	printf("%s", s);
+	strcpy(info->date, s);
+	move(0,9);
+	printf("umpire1 : ");
+	move(11, 9);
 	scanf("%[^\n]", info->umpire1);
-	printf("umpire 2 : \n");
+	move(25, 9)
+	printf("umpire2 : ");
+	move(36, 9);
 	scanf("%[^\n]", info->umpire2);
 } 			
 void display(batsman *team1, bowler *team2, matchinfo *info, team *overall) {
-	printinfo(info);
-	move(0,5);
+	move(0,15);
 	printf("Name of batsman");
-	move(16, 5);
+	move(16, 15);
 	printf("r");
-	move(20, 5);
+	move(20, 15);
 	printf("b");
-	move(24, 5);
+	move(24, 15);
 	printf("4s");
-	move(28, 5);
+	move(28, 15);
 	printf("6s");
-	move(32, 5);
+	move(32, 15);
 	printf("st");
 	printbat(team1);
-	move(0, 20);
+	move(0, 25);
 	printf("Name of bowler");
-	move(16, 20);
+	move(16, 25);
 	printf("o");
-	move(20, 20);
+	move(20, 25);
 	printf("r");
-	move(24, 20);
+	move(24, 25);
 	printf("w");
-	move(28, 20);
+	move(28, 25);
 	printf("m");
-	move(32, 20);
+	move(32, 25);
 	printf("e");
-	move(36, 20);
+	move(36, 25);
 	printf("eco");
-	move(40, 20);
+	move(40, 25);
 	printf("st");
 	printbat(team2);
 }
