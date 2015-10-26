@@ -4,7 +4,6 @@
 #include <stdlib.h>
 void move(int x, int y) {
 	printf("\033[%d;%df", y, x);
-	fflush(stdout);
 }
 void printbat(batsman *bat) {
 	batsmannode  *temp;
