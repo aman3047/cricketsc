@@ -1,5 +1,5 @@
-project : main.o createlist.o file.o menu.o update.o
-		cc main.o createlist.o file.o menu.o update.o -o project
+project : main.o createlist.o file.o menu.o update.o print.o
+		cc main.o createlist.o file.o menu.o update.o print.o -o project
 main.o : main.c main.h
 		cc main.c -c  
 createlist.o : createlist.c main.h
@@ -10,3 +10,5 @@ menu.o : menu.c main.h
 		cc menu.c -c  
 update.o : update.c main.h
 		cc update.c -c    
+print.o : print.c main.h
+		cc print.c -c
