@@ -43,10 +43,15 @@ typedef struct team {
 	char *lastwicket;
 	int extras;
 	int innings;
+<<<<<<< HEAD
 	float reqrate;
 	int target;
 	float runrate;
 	int pscore;
+=======
+	float runrate;
+	int WASPscore;
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	int wickets;
 }team;
 void in_the_ground(batsman *bat);

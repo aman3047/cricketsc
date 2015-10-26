@@ -7,9 +7,13 @@ int runs = -1;
 char *ab = NULL;
 int wrong = 0;
 char name[16];
+<<<<<<< HEAD
 int dot = 0;
 batsmannode *onstrike, *offstrike;
 bowlernode *bowling;
+=======
+batsmannode *onstrike, *offstrike;
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 bowlernode *searchbowler(bowler *bowl, char *name) {
 	bowlernode *temp;
 	temp = bowl->head;
@@ -20,6 +24,7 @@ bowlernode *searchbowler(bowler *bowl, char *name) {
 	}
 	return NULL;
 }
+<<<<<<< HEAD
 int scorepredict(team *overall, matchinfo *info) {
 	int score;
 	int percent;
@@ -57,11 +62,16 @@ int scorepredict(team *overall, matchinfo *info) {
 	}	
 }
 void changestrike() {
+=======
+
+void changestrike(batsmannode *onstrike, batsmannode *offstrike) {
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	batsmannode *temp;
 	temp = onstrike;
 	onstrike = offstrike;
 	offstrike = temp;
 }
+<<<<<<< HEAD
 void newbatsman(batsman *team1, char ci) {
 	char name[16];
 	batsmannode *on;
@@ -80,13 +90,27 @@ void newbatsman(batsman *team1, char ci) {
 	taking_guard(on);
 }	
 void changebowler(bowler *team2) {
+=======
+void newbatsman(batsman *team1, batsmannode *on) {
+	char name[16];
+	printf("enter name of batsman :\n");
+	scanf("%[^\n]", name);
+	on =  send_batsman(team1, name);
+	taking_guard(on);
+}	
+void changebowler(bowler *team2, bowlernode *bowling) {
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	bowlernode *newbowler;
 	printf("enter name of bowler:\n");
 	scanf("%[^\n]", name);
 	newbowler = searchbowler(team2, name);
 	if(newbowler == bowling){
 		printf("change bowler\n");
+<<<<<<< HEAD
 		changebowler(team2);
+=======
+		changebowler(team2, bowling);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	}
 	else if(newbowler)
 		bowling = newbowler;
@@ -95,11 +119,19 @@ void changebowler(bowler *team2) {
 		shining_bowl(bowling);
 	}
 }	
+<<<<<<< HEAD
 void wicket(batsman *team1, team *overall) {
 	printf("how batsman got out?\n");
 	printf("bowled(b), caught(c), lbw(l), run out(r), retired hurt(h), heatwicket(t), time out(o), \n");
 	char ch;	
 	char *e, *f, *b, *d, *c, *p;	
+=======
+void wicket(batsman *team1, batsmannode *onstrike, batsmannode *offstrike, bowlernode *bowling, team *overall) {
+	printf("how batsman got out?\n");
+	printf("bowled (b), caught(c), lbw(l), run out(r), retired hurt(h), heatwicket(t)\n");
+	char ch, ci;	
+	char *e, *f, *b, *d, *c;	
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	ch = getchar();
 	switch (ch) {
 		case 'c' :
@@ -112,7 +144,11 @@ void wicket(batsman *team1, team *overall) {
 			b = " b ";
 			printf("enter name of catcher\n");
 			scanf("%[^\n]", f); 
+<<<<<<< HEAD
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(bowling->name) + strlen(onstrike->name) + 9 + strlen(f))));
+=======
+			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(bowling->name) +strlen(onstrike->name) + 9 + strlen(f))));
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, c);
 			strcat(overall->lastwicket, f);
@@ -121,7 +157,11 @@ void wicket(batsman *team1, team *overall) {
 			free(b);
 			free(f);
 			free(c);
+<<<<<<< HEAD
 			newbatsman(team1, 'c');
+=======
+			newbatsman(team1, onstrike);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 			break;
 		case 'b' :
 			bowling->wickets++;
@@ -133,7 +173,11 @@ void wicket(batsman *team1, team *overall) {
 			strcat(overall->lastwicket, b);
 			strcat(overall->lastwicket, bowling->name);
 			free(b);
+<<<<<<< HEAD
 			newbatsman(team1, 'b');
+=======
+			newbatsman(team1, onstrike);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 			break;
 		case 'l' :
 			bowling->wickets++;
@@ -145,7 +189,11 @@ void wicket(batsman *team1, team *overall) {
 			strcat(overall->lastwicket, b);
 			strcat(overall->lastwicket, bowling->name);
 			free(b);
+<<<<<<< HEAD
 			newbatsman(team1, 'l');
+=======
+			newbatsman(team1, onstrike);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 			break;
 		case 't' :
 			bowling->wickets++;
@@ -156,20 +204,32 @@ void wicket(batsman *team1, team *overall) {
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, d);
 			strcat(overall->lastwicket, bowling->name);
+<<<<<<< HEAD
 			newbatsman(team1, 't');
 			break;
 		case 'h' :
 			e = (char *)malloc((sizeof(char)) * 16);
 			e = " retired hurt ";
+=======
+			newbatsman(team1, onstrike);
+			break;
+		case 'h' :
+			e = (char *)malloc((sizeof(char)) * 16);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 			overall->lastwicket = (char *)malloc(sizeof(char) * (strlen(onstrike->name) + strlen(e) + 1));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, e);
 			free(e);
+<<<<<<< HEAD
 			newbatsman(team1, 'h');
+=======
+			newbatsman(team1, onstrike);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 			break;
 		case 'r' :
 			overall->wickets++;
 			f = (char *)malloc((sizeof(char)) * 16);
+<<<<<<< HEAD
 			f = " run out ";
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(f) + strlen(onstrike->name) + 1)));
 			strcpy(overall->lastwicket, onstrike->name);
@@ -195,6 +255,26 @@ void add_runs_with_extra(bowler *team2, team *overall) {
 	bowling->runs += runs;
 	if(runs == 0)
 		dot++;
+=======
+			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(f) + strlen(onstrike->name) + 1)));
+			strcpy(overall->lastwicket, onstrike->name);
+			strcat(overall->lastwicket, f);
+			strcat(overall->lastwicket, bowling->name);
+			free(f);
+			printf("is new batsman on strike ? y/n ");
+			ci = getchar();
+			if(ci == 'y')
+				newbatsman(team1, onstrike);
+			else
+				newbatsman(team1, offstrike);
+			break;
+	}
+}				 
+void add_runs_with_extra(bowler *team2, batsmannode *onstrike, bowlernode *bowling, team *overall) {
+	if((ab[0] == 'n') && runs > 1)	
+		onstrike->runs += runs - 1;
+	bowling->runs += runs;
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	if(ab[0] == 'e')
 		onstrike->balls++;
 	onstrike->strikerate = ((onstrike->runs) / (onstrike->balls)) * 100;
@@ -215,14 +295,20 @@ void add_runs_with_extra(bowler *team2, team *overall) {
 	if(((bowling->balls) % 6) == 0) {
 		bowling->overs += 0.4;
 		overall->overs += 0.4;
+<<<<<<< HEAD
 		changebowler(team2);
 		changestrike();
+=======
+		changebowler(team2, bowling);
+		changestrike(onstrike, offstrike);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	}
 	overall->totalruns += runs;
 	overall->runrate = overall->totalruns / overall->overs;
 	overall->partnership = overall->partnership + runs;
 	overall->extras += runs;
 	bowling->extras += runs;
+<<<<<<< HEAD
 	if(overall->innings == 2) {
 		overall->target = overall->target - overall->totalruns;
 		overall->reqrate = overall->target / (50 - overall->overs);
@@ -231,12 +317,21 @@ void add_runs_with_extra(bowler *team2, team *overall) {
 	ab = NULL;
 }	
 void add_runs_with_no_extra(bowler *team2, team *overall) {
+=======
+	runs = -1;
+	ab = NULL;
+}	
+void add_runs_with_no_extra(bowler *team2, batsmannode *onstrike, batsmannode *offstrike, bowlernode *bowling, team *overall) {
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	onstrike->runs += runs;
 	bowling->runs += runs;
 	onstrike->balls++;
 	onstrike->strikerate = ((onstrike->runs) / (onstrike->balls)) * 100;
+<<<<<<< HEAD
 	if(runs == 0)
 		dot++;
+=======
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	if(runs == 4)
 		onstrike->four++;
 	else if(runs == 6)  
@@ -252,6 +347,7 @@ void add_runs_with_no_extra(bowler *team2, team *overall) {
 	if((bowling->balls % 6) == 0) {
 		bowling->overs += 0.4;
 		overall->overs += 0.4;
+<<<<<<< HEAD
 		changebowler(team2);
 		changestrike();
 		if(dot == 6)
@@ -261,6 +357,10 @@ void add_runs_with_no_extra(bowler *team2, team *overall) {
 	if(overall->innings == 2) {
 		overall->target = overall->target - overall->totalruns;
 		overall->reqrate = overall->target / (50 - overall->overs);
+=======
+		changebowler(team2, bowling);
+		changestrike(onstrike, offstrike);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	}
 	overall->totalruns += runs;
 	overall->runrate = overall->totalruns / overall->overs;
@@ -318,6 +418,10 @@ void update() {
 	offstrike = send_batsman(&team1, name);
 	taking_guard(onstrike);
 	taking_guard(offstrike);
+<<<<<<< HEAD
+=======
+	bowlernode *bowling;
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	printf("enter name of bowler:\n");		
 	scanf("%[^\n]", name);	
 	bowling = give_bowl(&team2, name);
@@ -331,6 +435,7 @@ void update() {
 			wrong = 0;
 		}
 		else if(ab == NULL)
+<<<<<<< HEAD
 			add_runs_with_no_extra(&team2, &overall);
 		else {
 			if(ab[0] == 'y' || ab[0] == 'n' || ab[0] == 'e')
@@ -340,3 +445,16 @@ void update() {
 		}			
 	}
 }		
+=======
+			add_runs_with_no_extra(&team2, onstrike, offstrike, bowling, &overall);
+		else {
+			if(ab[0] == 'y' || ab[0] == 'n' || ab[0] == 'e')
+				add_runs_with_extra(&team2, onstrike, bowling, &overall);
+			else
+				wicket(&team1, onstrike, offstrike, bowling, &overall);
+		}			
+	}
+}
+		
+			
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b

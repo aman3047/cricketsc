@@ -1,15 +1,23 @@
 #include <stdio.h>
+<<<<<<< HEAD
 #include <time.h>
 void move(int x, int y) {
 	printf("\033[%d;%df", y, x);
 	fflush(stdout);
 }
+=======
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 void printbat(batsman *bat) {
 	batsmannode  *temp;
 	temp = bat->head;
 	while(temp) {
+<<<<<<< HEAD
 		move()
 		printf("%s", temp->name);
+=======
+		printf("%[^
+]", temp->name);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 		printf("%d", temp->runs);
 		printf("%d", temp->balls);
 		printf("%d", temp->four);
@@ -23,7 +31,11 @@ void printbowl(bowler *bowl) {
 	bowlernode  *temp;
 	temp = bowl->head;
 	while(temp) {
+<<<<<<< HEAD
 		printf("%s", temp->name);
+=======
+		printf("%[^\n]", temp->name);
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 		printf("%f", temp->overs);
 		printf("%d", temp->runs);
 		printf("%d", temp->wicket);
@@ -35,6 +47,7 @@ void printbowl(bowler *bowl) {
 		temp = temp->next;
 	}
 }
+<<<<<<< HEAD
 char *date(){
 	struct tm *tm_now;
 	time_t now;	
@@ -47,6 +60,8 @@ char *date(){
 	strcpy(r, b);
 	return r;
 }
+=======
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 printinfo(matchinfo *info){
 	printf("series name\n");
 	scanf("%[^\n]", info->sname);
@@ -61,6 +76,7 @@ printinfo(matchinfo *info){
 	scanf("%[^\n]", info->umpire1);
 	printf("umpire 2 : \n");
 	scanf("%[^\n]", info->umpire2);
+<<<<<<< HEAD
 } 			
 void display(batsman *team1, bowler *team2, matchinfo *info, team *overall) {
 	printinfo(info);
@@ -93,5 +109,14 @@ void display(batsman *team1, bowler *team2, matchinfo *info, team *overall) {
 	printf("eco");
 	move(40, 20);
 	printf("st");
+=======
+	
+} 			
+void display(batsman *team1, bowler *team2, matchinfo *info, team *overall) {
+	printinfo(info);
+	printf("Name of batsman\t\tr\tb\tf\ts\tst\n");
+	printbat(team1);
+	printf("Name of batsman\t\to\tr\tw\tm\te\teco\tst\n");
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 	printbat(team2);
 }

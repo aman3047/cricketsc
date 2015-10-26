@@ -72,10 +72,15 @@ void start(team *overall) {
 	overall->lastwicket = NULL;
 	overall->extras = 0;
 	overall->innings = 1;
+<<<<<<< HEAD
 	overall->pscore = 0;
 	overall->runrate = 0;
 	overall->reqrate = 0;
 	overall->target = 0;
+=======
+	overall->WASPscore = 0;
+	overall->runrate = 0;
+>>>>>>> 6e73ec74f4a61b39baf15146f1b5f77027130f3b
 }
 			
 			
