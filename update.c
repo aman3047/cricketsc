@@ -337,6 +337,8 @@ void update() {
 				add_runs_with_extra(&team2, &overall);
 			else
 				wicket(&team1, &overall);
-		}			
+		}
+		display(&team1, &team2, &info, &overall)			
 	}
+	write();
 }		

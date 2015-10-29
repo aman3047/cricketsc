@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+void write(char *s) {
+	
+}	
 void openfile(char *s) {
 	strcat(s, ".txt");
 	FILE *list;
@@ -20,7 +23,9 @@ void openfile(char *s) {
 		perror("error :");
 		return;
 	}
-	display();
+	matchinfo info;	
+	printifo(&info);
+	update();
 	fclose(file);	
 }
 void searchfile(char *s) {
