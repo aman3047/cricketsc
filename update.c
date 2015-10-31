@@ -66,7 +66,7 @@ void newbatsman(batsman *team1, char ci) {
 	char name[16];
 	batsmannode *on;
 	printf("enter name of batsman :\n");
-	scanf("%[^\n]", name);
+	scanf("%[^\n]%*c", name);
 	if(ci == 'c' || ci == 'r') {
 		printf("is new batsman on strike ? y/n ");
 		ci = getchar();
@@ -82,7 +82,7 @@ void newbatsman(batsman *team1, char ci) {
 void changebowler(bowler *team2) {
 	bowlernode *newbowler;
 	printf("enter name of bowler:\n");
-	scanf("%[^\n]", name);
+	scanf("%[^\n]%*c", name);
 	newbowler = searchbowler(team2, name);
 	if(newbowler == bowling){
 		printf("change bowler\n");
@@ -111,7 +111,7 @@ void wicket(batsman *team1, team *overall) {
 			b = (char *)malloc((sizeof(char)) * 4);
 			b = " b ";
 			printf("enter name of catcher\n");
-			scanf("%[^\n]", f); 
+			scanf("%[^\n]%*c", f); 
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(bowling->name) + strlen(onstrike->name) + 9 + strlen(f))));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, c);
@@ -301,44 +301,40 @@ void input(char *a) {
 	}
 	ab[j] = '\0';
 }			
-void update() {
+void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 	char a[4];
-	team overall;
-	start(&overall);
-	batsman team1;
-	bowler team2;
-	in_the_ground(&team1);
-	warming_up(&team2);
-	matchinfo info;
+	char *e = "%[^\n]%*c";
+	start(overall);
+	in_the_ground(team1);
+	warming_up(team2);
 	printf("enter name of batsman on stike:\n");
-	scanf("%[^\n]", name);
-	onstrike = send_batsman(&team1, name);
+	scanf(e, name);
+	onstrike = send_batsman(team1, name);
 	printf("enter name of batsman off strike:\n");
-	scanf("%[^\n]", name);
-	offstrike = send_batsman(&team1, name);
+	scanf(e, name);
+	offstrike = send_batsman(team1, name);
 	taking_guard(onstrike);
 	taking_guard(offstrike);
 	printf("enter name of bowler:\n");		
-	scanf("%[^\n]", name);	
-	bowling = give_bowl(&team2, name);
+	scanf(e, name);	
+	bowling = give_bowl(team2, name);
 	shining_bowl(bowling);
 	printf("enter runs made , wicket(w), wide(y), noball(n), extra(e)");
-	while(overall.overs != info.overs) {     	
-		scanf("%[^\n]", a);
+	while((overall->overs != info->overs) || (overall->wickets != 10)) {     	
+		scanf(e, a);
 		input(a);
 		if(wrong) {
 			printf("INVALIND INPUT:\n");
 			wrong = 0;
 		}
 		else if(ab == NULL)
-			add_runs_with_no_extra(&team2, &overall);
+			add_runs_with_no_extra(team2, overall);
 		else {
 			if(ab[0] == 'y' || ab[0] == 'n' || ab[0] == 'e')
-				add_runs_with_extra(&team2, &overall);
+				add_runs_with_extra(team2, overall);
 			else
-				wicket(&team1, &overall);
+				wicket(team1, overall);
 		}
-		display(&team1, &team2, &info, &overall)			
+		display(team1, team2, overall);			
 	}
-	write();
 }		

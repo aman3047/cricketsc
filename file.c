@@ -3,10 +3,29 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-void write(char *s) {
-	
-}	
+#include "main.h"
+void write(char *s, team *overall, batsman *team1, bowler *team2, matchinfo *info) {
+	strcat(s, ".txt");
+	FILE *write;
+	write = fopen(s, "w");
+	if(write == NULL) {
+		perror("error :");
+		return;
+	}
+	fwrite(overall, sizeof(team), 1, write);
+        fwrite(team1, sizeof(batsmannode), 11, write);
+	fwrite(team2, sizeof(bowlernode), 11, write);
+        fwrite(info, sizeof(matchinfo), 1, write);
+	fclose(write);	
+}
 void openfile(char *s) {
+	team overall;
+	batsman team1;
+	bowler team2;
+	matchinfo info;
+	char candy;
+	char a[32];
+	int i = 0;
 	strcat(s, ".txt");
 	FILE *list;
 	list = fopen("records", "a+");
@@ -14,6 +33,21 @@ void openfile(char *s) {
 		perror("error :");
 		return;
 	}
+	while(candy != EOF) {
+        	candy = fgetc(list);
+        	a[i] = candy;
+        	if(candy == '\n') {
+                	a[i] = '\0';
+                	i = -1;
+                	if(strcmp(a, s) == 0) {
+                		printf("File already exists!");
+				scanf("%[^\n]", s);
+				strcat(s, ".txt");
+                		break;
+               		}
+            	}
+            	i++;
+       	}
 	fseek(list, 0, SEEK_END);
         fprintf(list, "%s", s);
         fprintf(list, "\n");
@@ -22,13 +56,17 @@ void openfile(char *s) {
 	if(file == NULL) {
 		perror("error :");
 		return;
-	}
-	matchinfo info;	
-	printifo(&info);
-	update();
+	}	
+	printinfo(&info);
+	update(&overall, &team1, &team2, &info);
+	write(s, &overall, &team1, &team2, &info);
 	fclose(file);	
 }
 void searchfile(char *s) {
+	team overall;
+	batsman team1;
+	bowler team2;
+	matchinfo info;
 	strcat(s, ".txt");
 	FILE *search;
 	search = fopen(s, "r");
@@ -36,11 +74,13 @@ void searchfile(char *s) {
 		perror("error :");
 		return;
 	}
-	fread(&team, sizeof(team, 1, search);
-        fread(&batsman, sizeof(batsmannode, 11, search);
-	fread(&bowler, sizeof(bowlernode, 11, search);
-        fread(&matchinfo, sizeof(matchinfo, 1, search);
-	display();
+	rewind(search);
+	fread(&overall, sizeof(team), 1, search);
+        fread(&team1, sizeof(batsmannode), 11, search);
+	fread(&team2, sizeof(bowlernode), 11, search);
+        fread(&info, sizeof(matchinfo), 1, search);
+	printinfo(&info);
+	display(&team1, &team2, &overall);
 	fclose(search);
 	main();
 }

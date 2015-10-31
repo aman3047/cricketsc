@@ -2,6 +2,8 @@
 #include <time.h>
 #include <string.h>
 #include <stdlib.h>
+#include "main.h"
+char *a = "%[^\n]%*c";
 void move(int x, int y) {
 	printf("\033[%d;%df", y, x);
 }
@@ -38,7 +40,7 @@ void printbowl(bowler *bowl) {
 		move(20, x);
 		printf("%d", temp->runs);
 		move(24, x);
-		printf("%d", temp->wicket);
+		printf("%d", temp->wickets);
 		move(28, x);
 		printf("%d", temp->maidens);
 		move(32, x);
@@ -51,33 +53,33 @@ void printbowl(bowler *bowl) {
 		x++;
 	}
 }
-char *date(){
+char *date() {
 	struct tm *tm_now;
 	time_t now;	
 	char b[16];
 	char *r;
-	r = (char *)malloc((sizeof(char)) * 16)
+	r = (char *)malloc((sizeof(char)) * 16);
 	now = time (NULL);
 	tm_now = localtime(&now);
 	strftime(b, sizeof b, "%a %d %m %Y", tm_now);
 	strcpy(r, b);
 	return r;
 }
-void printinfo(matchinfo *info){
+void printinfo(matchinfo *info) {
 	char *s;
 	s = (char *)malloc((sizeof(char)) * 16);
-	move(0, 5)
+	move(0, 5);
 	printf("series name: ");
 	move(13, 5);
-	scanf("%[^\n]", info->sname);
+	scanf(a, info->sname);
 	move(30, 5);
 	printf("toss: ");
 	move(37, 5); 
-	scanf("%[^\n]", info->toss);
+	scanf(a, info->toss);
 	move(0, 7);
 	printf("venue: ");
 	move(8, 7);
-	scanf("%[^\n]", info->venue);
+	scanf(a, info->venue);
 	move(25, 7);
 	printf("date: ");
 	s = date();
@@ -87,14 +89,14 @@ void printinfo(matchinfo *info){
 	move(0,9);
 	printf("umpire1 : ");
 	move(11, 9);
-	scanf("%[^\n]", info->umpire1);
-	move(25, 9)
+	scanf(a, info->umpire1);
+	move(25, 9);
 	printf("umpire2 : ");
 	move(36, 9);
-	scanf("%[^\n]", info->umpire2);
+	scanf(a, info->umpire2);
 	free(s);
 } 			
-void display(batsman *team1, bowler *team2, matchinfo *info, team *overall) {
+void display(batsman *team1, bowler *team2, team *overall) {
 	move(0,15);
 	printf("Name of batsman");
 	move(16, 15);
@@ -124,5 +126,5 @@ void display(batsman *team1, bowler *team2, matchinfo *info, team *overall) {
 	printf("eco");
 	move(40, 25);
 	printf("st");
-	printbat(team2);
+	printbowl(team2);
 }
