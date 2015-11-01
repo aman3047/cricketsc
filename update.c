@@ -274,7 +274,7 @@ void input(char *a) {
 	if(ab)
 		free(ab);
 	ab = (char *)malloc(sizeof(char) * 2);
-	while(a[i] != 0) {
+	while(a[i] != '\0') {
 		if(isdigit(a[i])) {
 			runs = a[i] - '0';
 			i++;
@@ -303,7 +303,7 @@ void input(char *a) {
 }			
 void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 	char a[4];
-	char *e = "%[^\n]%*c";
+	char *e = "%s";
 	start(overall);
 	in_the_ground(team1);
 	warming_up(team2);
@@ -315,19 +315,22 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 	offstrike = send_batsman(team1, name);
 	taking_guard(onstrike);
 	taking_guard(offstrike);
+	printbat(team1);
+	printbowl(team2);
 	printf("enter name of bowler:\n");		
 	scanf(e, name);	
 	bowling = give_bowl(team2, name);
 	shining_bowl(bowling);
-	printf("enter runs made , wicket(w), wide(y), noball(n), extra(e)");
 	while((overall->overs != info->overs) || (overall->wickets != 10)) {     	
-		scanf(e, a);
+		printf("enter runs made , wicket(w), wide(y), noball(n), extra(e)");		
+		scanf("%s", a);
 		input(a);
+		printf("%d", runs);
 		if(wrong) {
 			printf("INVALIND INPUT:\n");
 			wrong = 0;
 		}
-		else if(ab == NULL)
+		else if(ab[0] == '\0')
 			add_runs_with_no_extra(team2, overall);
 		else {
 			if(ab[0] == 'y' || ab[0] == 'n' || ab[0] == 'e')

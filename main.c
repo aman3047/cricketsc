@@ -7,7 +7,6 @@ int main() {
 	char *s;
 	s = (char *)malloc((sizeof(char)) * 16);
 	c = menu();
-	FILE *new;
 	switch(c) {
 		case '1' :
 			printf("enter title\n");

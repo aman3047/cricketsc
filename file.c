@@ -41,7 +41,7 @@ void openfile(char *s) {
                 	i = -1;
                 	if(strcmp(a, s) == 0) {
                 		printf("File already exists!");
-				scanf("%[^\n]", s);
+				scanf("%s", s);
 				strcat(s, ".txt");
                 		break;
                		}

@@ -9,7 +9,7 @@ void in_the_ground(batsman *bat) {
 }
 batsmannode *send_batsman(batsman *bat, char *name) {
 	batsmannode  *temp;
-	temp = (batsmannode *)malloc(sizeof(batsman));
+	temp = (batsmannode *)malloc(sizeof(batsmannode));
 	strcpy(temp->name, name);
 	if(bat->count == 0) {
 		bat->head = temp;
@@ -23,7 +23,7 @@ batsmannode *send_batsman(batsman *bat, char *name) {
 		temp->next = NULL;
 		bat->count++;
 	}
-	return bat->head;
+	return temp;
 }
 void taking_guard(batsmannode *bat) {
 	bat->runs = 0;
@@ -39,7 +39,7 @@ void warming_up(bowler *bowl) {
 }
 bowlernode *give_bowl(bowler *bowl, char *name) {
 	bowlernode  *temp;
-	temp = (bowlernode *)malloc(sizeof(bowler));
+	temp = (bowlernode *)malloc(sizeof(bowlernode));
 	strcpy(temp->name, name);
 	if(bowl->count == 0) {
 		bowl->head = temp;
@@ -53,7 +53,7 @@ bowlernode *give_bowl(bowler *bowl, char *name) {
 		temp->next = NULL;
 		bowl->count++;		
 	}
-	return bowl->head;
+	return temp;
 }
 void shining_bowl(bowlernode *bowl) {
 	bowl->overs = 0;

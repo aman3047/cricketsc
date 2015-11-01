@@ -70,7 +70,7 @@ int scorepredict(team *overall, matchinfo *info);
 bowlernode *searchbowler(bowler *bowl, char *name);
 void display(batsman *team1, bowler *team2, team *overall);
 void printinfo(matchinfo *info);
-
+char menu();
  
 
 	
