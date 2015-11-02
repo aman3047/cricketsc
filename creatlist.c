@@ -76,4 +76,5 @@ void start(team *overall) {
 	overall->runrate = 0;
 	overall->reqrate = 0;
 	overall->target = 0;
+	overall->wickets = 0;
 }		

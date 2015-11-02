@@ -65,7 +65,7 @@ char *date() {
 	strcpy(r, b);
 	return r;
 }
-void printinfo(matchinfo *info) {
+void getinfo(matchinfo *info) {
 	char *s;
 	s = (char *)malloc((sizeof(char)) * 16);
 	//move(0, 5);
@@ -98,7 +98,36 @@ void printinfo(matchinfo *info) {
 	scanf("%d", &(info->overs));
 	printf("\n");
 	free(s);
-} 			
+}
+void printinfo(matchinfo *info) {
+	//move(0, 5);
+	printf("series name: ");
+	//move(13, 5);
+	printf(a, info->sname);
+	//move(30, 5);
+	printf("\ntoss: ");
+	//move(37, 5); 
+	printf(a, info->toss);
+	//move(0, 7);
+	printf("\nvenue: ");
+	//move(8, 7);
+	printf(a, info->venue);
+	//move(25, 7);
+	printf("\ndate: ");
+	//move(33, 7);
+	printf("%s",info->date);
+	//move(0,9);
+	printf("\numpire1 : ");
+	//move(11, 9);
+	printf(a, info->umpire1);
+	//move(25, 9);
+	printf("\numpire2 : ");
+	//move(36, 9);
+	printf(a, info->umpire2);
+	printf("\novers : ");
+	printf("%d", (info->overs));
+	printf("\n");
+} 			 			
 void display(batsman *team1, bowler *team2, team *overall) {
 	//move(0,15);
 	printf("Name of batsman\t");
@@ -130,4 +159,30 @@ void display(batsman *team1, bowler *team2, team *overall) {
 	//move(40, 25);
 	printf("st\n");
 	printbowl(team2);
+	printf("totalruns\n");
+	printf("%d/%d (%f)\n",overall->totalruns, overall->wickets, overall->overs);
+	printf("partnership\n");
+	printf("%d\n",overall->partnership);
+	if(overall->lastwicket) {
+		printf("lastwicket\n");
+		printf("%s\n",overall->lastwicket);
+	}
+	printf("extras\n");
+	printf("%d\n",overall->extras);
+	printf("innings\n");
+	printf("%d\n",overall->innings);
+	if(overall->innings == 2) {
+		printf("reqrate\n");
+		printf("%f\n",overall->reqrate);
+		printf("target\n");
+		printf("%d\n",overall->target);
+		printf("winning percentage\n");
+		printf("%d\n",overall->pscore);	
+	}
+	else {
+		printf("projected score\n");
+		printf("%d\n",overall->pscore);
+	}
+	printf("runrate\n");
+	printf("%f\n",overall->runrate);
 }

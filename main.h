@@ -60,17 +60,20 @@ void write(char *s, team *overall, batsman *team1, bowler *team2, matchinfo *inf
 void openfile(char *s);
 void searchfile(char *s);
 void update(team *overall, batsman *team1, bowler *team2, matchinfo *info);
-void add_runs_with_no_extra(bowler *team2, team *overall);
-void add_runs_with_extra(bowler *team2, team *overall);
-void wicket(batsman *team1, team *overall);
+void add_runs_with_no_extra(batsman *team1, bowler *team2, team *overall, matchinfo *info);
+void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo *info);
+void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info);
 void changebowler(bowler *team2);
 void newbatsman(batsman *team1, char ci);
 void changestrike();
 int scorepredict(team *overall, matchinfo *info);
 bowlernode *searchbowler(bowler *bowl, char *name);
 void display(batsman *team1, bowler *team2, team *overall);
-void printinfo(matchinfo *info);
+void getinfo(matchinfo *info);
 char menu();
+void printbat(batsman *bat);
+void printbowl(bowler *bowl);
+void printinfo(matchinfo *info);
  
 
 	

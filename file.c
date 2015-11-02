@@ -57,7 +57,7 @@ void openfile(char *s) {
 		perror("error :");
 		return;
 	}	
-	printinfo(&info);
+	getinfo(&info);
 	update(&overall, &team1, &team2, &info);
 	write(s, &overall, &team1, &team2, &info);
 	fclose(file);	

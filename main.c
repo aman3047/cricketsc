@@ -13,11 +13,13 @@ int main() {
 			scanf("%s", s); 
 			openfile(s);
 			free(s);
+			break;
 		case '2' :
 			printf("scoresheet name\n");
 			scanf("%s", s);
 			searchfile(s);
 			free(s);
+			break;
 		case '3' :
 			exit(1);
 	}
