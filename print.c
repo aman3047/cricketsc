@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "main.h"
-char *a = "%s";
+char *a = "%[^\n]";
 void move(int x, int y) {
 	printf("\033[%d;%df", y, x);
 }
@@ -14,6 +14,8 @@ void printbat(batsman *bat) {
 	while(temp) {
 		//move(0, x);
 		printf("%s\t", temp->name);
+		if(temp->status)
+			printf("%s\t", temp->status);
 		//move(16, x);
 		printf("%d\t", temp->runs);
 		//move(20, x);
@@ -23,7 +25,7 @@ void printbat(batsman *bat) {
 		//move(28, x);
 		printf("%d\t", temp->six);
 		//move(32, x);
-		printf("%f\n", temp->strikerate);
+		printf("%0.2f\n", temp->strikerate);
 		temp = temp->next;
 		x++;
 	}
@@ -36,7 +38,7 @@ void printbowl(bowler *bowl) {
 		//move(0, x);
 		printf("%s\t", temp->name);
 		//move(16, x);
-		printf("%f\t", temp->overs);
+		printf("%0.1f\t", temp->overs);
 		//move(20, x);
 		printf("%d\t", temp->runs);
 		//move(24, x);
@@ -46,9 +48,12 @@ void printbowl(bowler *bowl) {
 		//move(32, x);
 		printf("%d\t", temp->extras);
 		//move(36, x);
-		printf("%f\t", temp->economy);
+		printf("%0.2f\t", temp->economy);
 		//move(40, x);
-		printf("%f\n", temp->strikerate);
+		if(temp->strikerate)
+			printf("%0.2f\n", temp->strikerate);
+		else 
+			printf("-\n");
 		temp = temp->next;
 		x++;
 	}
@@ -70,17 +75,21 @@ void getinfo(matchinfo *info) {
 	s = (char *)malloc((sizeof(char)) * 16);
 	//move(0, 5);
 	printf("series name: ");
+	getchar();
 	//move(13, 5);
 	scanf(a, info->sname);
 	//move(30, 5);
+	getchar();
 	printf("\ntoss: ");
 	//move(37, 5); 
 	scanf(a, info->toss);
 	//move(0, 7);
 	printf("\nvenue: ");
 	//move(8, 7);
+	getchar();
 	scanf(a, info->venue);
 	//move(25, 7);
+	getchar();
 	printf("\ndate: ");
 	s = date();
 	//move(33, 7);
@@ -89,14 +98,18 @@ void getinfo(matchinfo *info) {
 	//move(0,9);
 	printf("\numpire1 : ");
 	//move(11, 9);
+	getchar();
 	scanf(a, info->umpire1);
 	//move(25, 9);
 	printf("\numpire2 : ");
 	//move(36, 9);
+	getchar();
 	scanf(a, info->umpire2);
 	printf("\novers : ");
+	getchar();
 	scanf("%d", &(info->overs));
 	printf("\n");
+	getchar();
 	free(s);
 }
 void printinfo(matchinfo *info) {
@@ -160,7 +173,7 @@ void display(batsman *team1, bowler *team2, team *overall) {
 	printf("st\n");
 	printbowl(team2);
 	printf("totalruns\n");
-	printf("%d/%d (%f)\n",overall->totalruns, overall->wickets, overall->overs);
+	printf("%d/%d (%0.1f)\n",overall->totalruns, overall->wickets, overall->overs);
 	printf("partnership\n");
 	printf("%d\n",overall->partnership);
 	if(overall->lastwicket) {
@@ -173,7 +186,7 @@ void display(batsman *team1, bowler *team2, team *overall) {
 	printf("%d\n",overall->innings);
 	if(overall->innings == 2) {
 		printf("reqrate\n");
-		printf("%f\n",overall->reqrate);
+		printf("%0.2f\n",overall->reqrate);
 		printf("target\n");
 		printf("%d\n",overall->target);
 		printf("winning percentage\n");
@@ -184,5 +197,5 @@ void display(batsman *team1, bowler *team2, team *overall) {
 		printf("%d\n",overall->pscore);
 	}
 	printf("runrate\n");
-	printf("%f\n",overall->runrate);
+	printf("%0.2f\n",overall->runrate);
 }

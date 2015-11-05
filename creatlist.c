@@ -29,6 +29,7 @@ void taking_guard(batsmannode *bat) {
 	bat->runs = 0;
 	bat->balls = 0;
 	bat->strikerate = 0;
+	bat->status = NULL;
 	bat->four = 0;
 	bat->six = 0;
 }

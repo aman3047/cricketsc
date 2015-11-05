@@ -98,201 +98,158 @@ void changebowler(bowler *team2) {
 		bowling = give_bowl(team2, name);
 		shining_bowl(bowling);
 	}
+}
+void afterwicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
+	bowling->overs += 0.1;
+	bowling->balls++;
+	overall->overs += 0.1;
+	dot++;
+	bowling->strikerate = (float)bowling->balls / bowling->wickets;
+	if(((bowling->balls) % 6) == 0) {
+		bowling->overs += 0.4;
+		overall->overs += 0.4;
+		overall->runrate = (overall->totalruns) / overall->overs;
+		bowling->economy = (bowling->runs ) / (bowling->overs);
+		display(team1, team2, overall);
+		if(overall->overs != info->overs) {
+			changebowler(team2);
+			changestrike();
+		}
+	}
+	else {
+		bowling->economy = ((bowling->runs) * 0.6) / (bowling->overs);
+		overall->runrate = (overall->totalruns * 0.6) / overall->overs;
+		display(team1, team2, overall);
+	}
+
 }	
 void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
+	char s[64];
 	char *e, *f, *b, *d, *c, *p;
-	char ch;
+	char cj;
+	int bo, on;
+	bo = strlen(bowling->name);
+	on = strlen(onstrike->name);
+	if(overall->lastwicket)
+		free(overall->lastwicket);
 	getchar();
-	ch = getchar();	
-	switch(ch) {
+	cj = getchar();	
+	switch(cj) {
 		case 'c' :
 			bowling->wickets++;
 			overall->wickets++;
 			onstrike->balls++;
-			overall->overs += 0.1;
 			c = (char *)malloc((sizeof(char)) * 4);
 			c = " c ";
 			f = (char *)malloc((sizeof(char)) * 16);
 			b = (char *)malloc((sizeof(char)) * 4);
 			b = " b ";
 			printf("enter name of catcher\n");
-			scanf("%s", f); 
-			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(bowling->name) + strlen(onstrike->name) + 9 + strlen(f))));
+			scanf("%s", f);
+			strcpy(s, c);
+			strcat(s, f);
+			strcat(s, b);
+			strcat(s, bowling->name);
+			onstrike->status = (char *)malloc(sizeof(char) * ((bo + 9 + strlen(f))));
+			overall->lastwicket = (char *)malloc(sizeof(char) * ((bo + on + 9 + strlen(f))));
 			strcpy(overall->lastwicket, onstrike->name);
-			strcat(overall->lastwicket, c);
-			strcat(overall->lastwicket, f);
-			strcat(overall->lastwicket, b);
-			strcat(overall->lastwicket, bowling->name);
+			strcat(overall->lastwicket, s);
+			strcpy(onstrike->status, s);
 			free(f);
-			bowling->overs += 0.1;
-			bowling->balls++;
 			newbatsman(team1, 'c');
-			if(((bowling->balls) % 6) == 0) {
-				bowling->overs += 0.4;
-				overall->overs += 0.4;
-				display(team1, team2, overall);
-				if(overall->overs != info->overs) {
-					changebowler(team2);
-					changestrike();
-				}
-			}
-			else
-				display(team1, team2, overall);
+			afterwicket(team1, team2, overall, info);
 			break;
 		case 'b' :
 			bowling->wickets++;
 			overall->wickets++;
 			onstrike->balls++;
-			overall->overs += 0.1;
 			b = (char *)malloc((sizeof(char)) * 4);
 			b = " b ";
-			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(bowling->name) + strlen(onstrike->name) + 9)));
+			strcpy(s, b);
+			strcat(s, bowling->name);
+			onstrike->status = (char *)malloc(sizeof(char) * ((bo + 9)));
+			overall->lastwicket = (char *)malloc(sizeof(char) * ((bo + on + 9)));
 			strcpy(overall->lastwicket, onstrike->name);
-			strcat(overall->lastwicket, b);
-			strcat(overall->lastwicket, bowling->name);
-			bowling->overs += 0.1;
-			bowling->balls++;
+			strcpy(onstrike->status, s);
+			strcat(overall->lastwicket, s);
 			newbatsman(team1, 'b');
-			if(((bowling->balls) % 6) == 0) {
-				bowling->overs += 0.4;
-				overall->overs += 0.4;
-				display(team1, team2, overall);
-				if(overall->overs != info->overs) {
-					changebowler(team2);
-					changestrike();
-				}
-			}
-			else
-				display(team1, team2, overall);
+			afterwicket(team1, team2, overall, info);
 			break;
 		case 'l' :
 			bowling->wickets++;
 			overall->wickets++;
 			onstrike->balls++;
-			overall->overs += 0.1;
 			b = (char *)malloc((sizeof(char)) * 4);
 			b = " l ";
-			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(bowling->name) + strlen(onstrike->name) + 9)));
+			strcpy(s, b);	
+			strcat(s, bowling->name);
+			onstrike->status = (char *)malloc(sizeof(char) * (bo + 9));
+			overall->lastwicket = (char *)malloc(sizeof(char) * ((bo + on + 9)));
 			strcpy(overall->lastwicket, onstrike->name);
-			strcat(overall->lastwicket, b);
-			strcat(overall->lastwicket, bowling->name);
-			bowling->overs += 0.1;
-			bowling->balls++;
+			strcpy(onstrike->status, s);
+			strcat(overall->lastwicket, s);
 			newbatsman(team1, 'l');
-			if(((bowling->balls) % 6) == 0) {
-				bowling->overs += 0.4;
-				overall->overs += 0.4;
-				display(team1, team2, overall);
-				if(overall->overs != info->overs) {
-					changebowler(team2);
-					changestrike();
-				}
-			}
-			else
-				display(team1, team2, overall);
+			afterwicket(team1, team2, overall, info);
 			break;
 		case 't' :
 			bowling->wickets++;
 			overall->wickets++;
 			onstrike->balls++;
-			overall->overs += 0.1;
 			d = (char *)malloc((sizeof(char)) * 5);
 			d = " ht ";
-			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(bowling->name) + strlen(onstrike->name) + 9)));
+			strcpy(s, d);
+			strcat(s, bowling->name);
+			onstrike->status = (char *)malloc(sizeof(char) * (bo + 9));
+			overall->lastwicket = (char *)malloc(sizeof(char) * ((bo + on + 9)));
 			strcpy(overall->lastwicket, onstrike->name);
-			strcat(overall->lastwicket, d);
-			strcat(overall->lastwicket, bowling->name);
-			bowling->overs += 0.1;
-			bowling->balls++;
+			strcpy(onstrike->status, s);
+			strcat(overall->lastwicket, s);
 			newbatsman(team1, 't');
-			if(((bowling->balls) % 6) == 0) {
-				bowling->overs += 0.4;
-				overall->overs += 0.4;
-				display(team1, team2, overall);
-				if(overall->overs != info->overs) {
-					changebowler(team2);
-					changestrike();
-				}
-			}
-			else
-				display(team1, team2, overall);
+			afterwicket(team1, team2, overall, info);
 			break;
 		case 'h' :
-			overall->overs += 0.1;
 			e = (char *)malloc((sizeof(char)) * 16);
 			e = " retired hurt ";
-			overall->lastwicket = (char *)malloc(sizeof(char) * (strlen(onstrike->name) + strlen(e) + 1));
+			onstrike->status = (char *)malloc(sizeof(char) * (strlen(e)));
+			overall->lastwicket = (char *)malloc(sizeof(char) * (on + strlen(e) + 1));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, e);
-			bowling->overs += 0.1;
-			bowling->balls++;
+			strcpy(onstrike->status, e);
 			onstrike->balls++;
 			newbatsman(team1, 'h');
-			if(((bowling->balls) % 6) == 0) {
-				bowling->overs += 0.4;
-				overall->overs += 0.4;
-				display(team1, team2, overall);
-				if(overall->overs != info->overs) {
-					changebowler(team2);
-					changestrike();
-				}
-			}
-			else
-				display(team1, team2, overall);
+			afterwicket(team1, team2, overall, info);
 			break;
 		case 'r' :
-			overall->overs += 0.1;
 			overall->wickets++;
 			onstrike->balls++;
 			f = (char *)malloc((sizeof(char)) * 16);
 			f = " run out ";
-			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(f) + strlen(onstrike->name) + 1)));
+			onstrike->status = (char *)malloc(sizeof(char) * (strlen(f) + 1));
+			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(f) + on + 1)));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, f);
-			bowling->overs += 0.1;
-			bowling->balls++;
+			strcpy(onstrike->status, f);
 			newbatsman(team1, 'r');
-			if(((bowling->balls) % 6) == 0) {
-				bowling->overs += 0.4;
-				overall->overs += 0.4;
-				display(team1, team2, overall);
-				if(overall->overs != info->overs) {
-					changebowler(team2);
-					changestrike();
-				}
-			}
-			else
-				display(team1, team2, overall);
+			afterwicket(team1, team2, overall, info);
 			break;
 		case 'o' :
-			overall->overs += 0.1;
 			overall->wickets++;
 			onstrike->balls++;
 			p = (char *)malloc((sizeof(char) * 16));
 			p = " time out ";
-			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(p) + strlen(onstrike->name) + 1)));
+			onstrike->status = (char *)malloc(sizeof(char) * (strlen(p) + 1));
+			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(p) + on + 1)));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, p);
-			bowling->overs += 0.1;
-			bowling->balls++;
-			newbatsman(team1, 'r');
-			if(((bowling->balls) % 6) == 0) {
-				bowling->overs += 0.4;
-				overall->overs += 0.4;
-				display(team1, team2, overall);
-				if(overall->overs != info->overs) {
-					changebowler(team2);
-					changestrike();
-				}
-			}
-			else
-				display(team1, team2, overall);
+			strcpy(onstrike->status, p);
+			newbatsman(team1, 'o');
+			afterwicket(team1, team2, overall, info);
 			break;
 		default :
 			printf("invalid input\n");
 	}
 }				 
-void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
+void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo *info) {	
 	if((ab[0] == 'n') && runs > 1)	
 		onstrike->runs += runs - 1;
 	bowling->runs += runs;
@@ -302,22 +259,29 @@ void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo
 		overall->overs += 0.1;
 		onstrike->balls++;
 	}
-	onstrike->strikerate = ((onstrike->runs) / (onstrike->balls)) * 100;
-	if((runs == 5) && (ab[0] == 'n'))
+	if(onstrike->balls)
+		onstrike->strikerate = ((onstrike->runs) / (onstrike->balls)) * 100;
+	if((runs == 5) && (ab[0] == 'n')) {
 		onstrike->four++;
-	else if((runs == 7) && (ab[0] == 'n'))  
+		printf("10\n");
+	}
+	else if((runs == 7) && (ab[0] == 'n')) {  
 		onstrike->six++;
-	else if(runs == 2 || runs == 4 || runs == 6)
+		printf("11\n");
+	}
+	else if(runs == 2 || runs == 4 || runs == 6) {
 		changestrike(onstrike, offstrike);
+		printf("12\n");
+	}
 	if(ab[0] == 'e') {
 		bowling->overs += 0.1;
 		bowling->balls++;
 	}
 	if(bowling->wickets)
 		bowling->strikerate = (bowling->balls) / (bowling->wickets);
-	bowling->economy = (bowling->runs) / (bowling->overs);
+	bowling->economy = ((bowling->runs) * 0.6) / (bowling->overs);
+	overall->runrate = (overall->totalruns * 0.6) / overall->overs;	
 	overall->totalruns += runs;
-	overall->runrate = overall->totalruns / overall->overs;
 	overall->partnership = overall->partnership + runs;
 	overall->extras += runs;
 	bowling->extras += runs;
@@ -327,9 +291,11 @@ void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo
 	}
 	runs = -1;
 	ab = NULL;
-	if(((bowling->balls) % 6) == 0) {
+	if((((bowling->balls) % 6) == 0) && (bowling->balls != 0)) {
 		bowling->overs += 0.4;
 		overall->overs += 0.4;
+		overall->runrate = (overall->totalruns) / overall->overs;
+		bowling->economy = (bowling->runs ) / (bowling->overs);
 		display(team1, team2, overall);
 		if(overall->overs != info->overs) {
 			changebowler(team2);
@@ -343,7 +309,7 @@ void add_runs_with_no_extra(batsman *team1, bowler *team2, team *overall, matchi
 	onstrike->runs += runs;
 	bowling->runs += runs;
 	onstrike->balls++;
-	onstrike->strikerate = ((onstrike->runs) / (onstrike->balls)) * 100;
+	onstrike->strikerate = ((onstrike->runs) * 100) / (onstrike->balls);
 	if(runs == 0)
 		dot++;
 	if(runs == 4)
@@ -356,19 +322,21 @@ void add_runs_with_no_extra(batsman *team1, bowler *team2, team *overall, matchi
 	bowling->balls++;
 	if(bowling->wickets)
 		bowling->strikerate = (bowling->balls) / (bowling->wickets);
-	bowling->economy = (bowling->runs) / (bowling->overs);
+	bowling->economy = ((bowling->runs) * 0.6) / (bowling->overs);
 	overall->overs += 0.1;
 	if(overall->innings == 2) {
 		overall->target = overall->target - overall->totalruns;
 		overall->reqrate = overall->target / (50 - overall->overs);
 	}
 	overall->totalruns += runs;
-	overall->runrate = overall->totalruns / overall->overs;
+	overall->runrate = (overall->totalruns * 0.6) / overall->overs;
 	overall->partnership = overall->partnership + runs;
 	runs = -1;
 	if((bowling->balls % 6) == 0) {
 		bowling->overs += 0.4;
 		overall->overs += 0.4;
+		overall->runrate = overall->totalruns / overall->overs;
+		bowling->economy = (bowling->runs) / (bowling->overs);
 		changestrike();
 		if(dot == 6)
 			bowling->maidens++;
@@ -408,11 +376,16 @@ void input(char *a) {
 				wrong = 1;
 				return;
 			}
-			else 
+			else {
 				wrong = 1;
+				return;
+			}
 		}
 	}
 	ab[j] = '\0';
+	printf("input : %s\n", ab);
+	printf("%c\n", ab[0]);
+	printf("%d\n", runs);
 }			
 void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 	char a[4];
@@ -437,21 +410,26 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 	while((overall->overs != info->overs) && (overall->wickets != 10)) {     	
 		printf("enter runs made , wicket(w), wide(y), noball(n), extra(e)");		
 		scanf("%s", a);
+		printf("%s\n", a);
 		input(a);
-		printf("%d", runs);
+		printf("%d", wrong);
 		if(wrong) {
 			printf("INVALIND INPUT:\n");
 			wrong = 0;
+			continue;
 		}
 		else if(ab[0] == '\0')
 			add_runs_with_no_extra(team1, team2, overall, info);
-		else {
-			if(ab[0] == 'y' || ab[0] == 'n' || ab[0] == 'e')
+		else {			
+			if(ab[0] == 'y' || ab[0] == 'n' || ab[0] == 'e') {
+				printf("yahoo\n");
 				add_runs_with_extra(team1, team2, overall, info);
+			}
 			else {
 				printf("bowled(b), caught(c), lbw(l), run out(r), retired hurt(h), heatwicket(t), time out(o)");
 				wicket(team1, team2, overall, info);			
 			}
 		}			
 	}
+	
 }		

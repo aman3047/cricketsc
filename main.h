@@ -5,6 +5,7 @@ typedef struct batsman {
 	float strikerate;
 	int four;
 	int six;
+	char *status;
 	struct batsman *next;
 }batsmannode;
 typedef struct list {
@@ -74,8 +75,3 @@ char menu();
 void printbat(batsman *bat);
 void printbowl(bowler *bowl);
 void printinfo(matchinfo *info);
- 
-
-	
-
-     
