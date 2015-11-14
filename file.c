@@ -5,13 +5,14 @@
 #include <errno.h>
 #include "main.h"
 void write(char *s, team *overall, batsman *team1, bowler *team2, matchinfo *info) {
-	strcat(s, ".txt");
 	FILE *write;
 	write = fopen(s, "w");
 	if(write == NULL) {
 		perror("error :");
 		return;
 	}
+	if(overall->innings == 2)
+		fseek(write, 0, SEEK_END);
 	int l;
 	l = team1->count;
 	batsmannode *p;
@@ -181,6 +182,7 @@ void searchfile(char *s) {
 		//move(40, x);
 		if(bowl.strikerate)
 			printf("%0.2f\n", bowl.strikerate);
+		m++;
 	}
 	int u = fread(result, sizeof(char), 64, search);
 	result[u] = '\0';

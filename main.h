@@ -5,7 +5,7 @@ typedef struct batsman {
 	float strikerate;
 	int four;
 	int six;
-	char *status;
+	char status[32];
 	struct batsman *next;
 }batsmannode;
 typedef struct list {
@@ -50,7 +50,7 @@ typedef struct team {
 	float runrate;
 	int pscore;
 	int wickets;
-	char result[128];
+	char result[64];
 }team;
 void in_the_ground(batsman *bat);
 batsmannode *send_batsman(batsman *bat, char *name);

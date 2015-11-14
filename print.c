@@ -21,8 +21,7 @@ void printbat(batsman *bat, batsmannode *onstrike, batsmannode *offstrike) {
 			printf("\n");
 			continue;
 		}
-		if(temp->status)
-			printf("%s\t", temp->status);
+		printf("%s\t", temp->status);
 		//move(16, x);
 		printf("%d\t", temp->runs);
 		//move(20, x);

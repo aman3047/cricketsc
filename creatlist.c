@@ -29,7 +29,7 @@ void taking_guard(batsmannode *bat) {
 	bat->runs = 0;
 	bat->balls = 0;
 	bat->strikerate = 0;
-	bat->status = NULL;
+	strcpy(bat->status, " batting ");
 	bat->four = 0;
 	bat->six = 0;
 }
@@ -37,7 +37,6 @@ void did_not_bat(batsmannode *bat) {
 	bat->runs = -1;
 	bat->balls = -1;
 	bat->strikerate = -1;
-	bat->status = NULL;
 	bat->four = -1;
 	bat->six = -1;
 }	

@@ -158,7 +158,6 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 			strcat(s, f);
 			strcat(s, b);
 			strcat(s, bowling->name);
-			onstrike->status = (char *)malloc(sizeof(char) * ((bo + 9 + strlen(f))));
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((bo + on + 9 + strlen(f))));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, s);
@@ -175,7 +174,6 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 			b = " b ";
 			strcpy(s, b);
 			strcat(s, bowling->name);
-			onstrike->status = (char *)malloc(sizeof(char) * ((bo + 9)));
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((bo + on + 9)));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcpy(onstrike->status, s);
@@ -191,7 +189,6 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 			b = " l ";
 			strcpy(s, b);	
 			strcat(s, bowling->name);
-			onstrike->status = (char *)malloc(sizeof(char) * (bo + 9));
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((bo + on + 9)));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcpy(onstrike->status, s);
@@ -207,7 +204,6 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 			d = " ht ";
 			strcpy(s, d);
 			strcat(s, bowling->name);
-			onstrike->status = (char *)malloc(sizeof(char) * (bo + 9));
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((bo + on + 9)));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcpy(onstrike->status, s);
@@ -218,7 +214,6 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 		case 'h' :
 			e = (char *)malloc((sizeof(char)) * 16);
 			e = " retired hurt ";
-			onstrike->status = (char *)malloc(sizeof(char) * (strlen(e)));
 			overall->lastwicket = (char *)malloc(sizeof(char) * (on + strlen(e) + 1));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, e);
@@ -232,7 +227,6 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 			onstrike->balls++;
 			f = (char *)malloc((sizeof(char)) * 16);
 			f = " run out ";
-			onstrike->status = (char *)malloc(sizeof(char) * (strlen(f) + 1));
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(f) + on + 1)));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, f);
@@ -245,7 +239,6 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 			onstrike->balls++;
 			p = (char *)malloc((sizeof(char) * 16));
 			p = " time out ";
-			onstrike->status = (char *)malloc(sizeof(char) * (strlen(p) + 1));
 			overall->lastwicket = (char *)malloc(sizeof(char) * ((strlen(p) + on + 1)));
 			strcpy(overall->lastwicket, onstrike->name);
 			strcat(overall->lastwicket, p);
@@ -454,14 +447,10 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 		if((overall->innings == 2) && overall->target <= 0) 
 			break;			
 	}
-	if(onstrike->status == NULL) {
-		onstrike->status = (char *)malloc(sizeof(char) * 16);
+	if(strcmp(onstrike->status, " batting ") == 0) 
 		strcpy(onstrike->status, " not out ");
-	}
-	if(offstrike->status == NULL) {
-		offstrike->status = (char *)malloc(sizeof(char) * 16);
+	if(strcmp(offstrike->status, " batting ") == 0) 
 		strcpy(offstrike->status, " not out ");
-	}
 	if(overall->wickets != 10) {
 		printf("enter names of remaining players");
 		v = overall->wickets;
