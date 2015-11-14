@@ -103,23 +103,31 @@ void afterwicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) 
 	bowling->overs += 0.1;
 	bowling->balls++;
 	overall->overs += 0.1;
+	overall->balls++;
 	dot++;
 	bowling->strikerate = (float)bowling->balls / bowling->wickets;
+	overall->runrate = (overall->totalruns * 6) / overall->balls;
+	bowling->economy = (bowling->runs * 6) / (bowling->balls);
+	overall->pscore = scorepredict(overall, info);
 	if(((bowling->balls) % 6) == 0) {
 		bowling->overs += 0.4;
 		overall->overs += 0.4;
 		overall->runrate = (overall->totalruns) / overall->overs;
 		bowling->economy = (bowling->runs ) / (bowling->overs);
-		display(team1, team2, overall);
-		if(overall->overs != info->overs) {
+		display(team1, team2, overall, onstrike, offstrike, bowling);
+		if((overall->innings == 2)  && (info->overs - overall->overs != 0))
+			overall->reqrate = overall->target / (info->overs - overall->overs);
+		if(overall->balls != (info->overs * 6)) {
 			changebowler(team2);
 			changestrike();
 		}
 	}
 	else {
-		bowling->economy = ((bowling->runs) * 0.6) / (bowling->overs);
-		overall->runrate = (overall->totalruns * 0.6) / overall->overs;
-		display(team1, team2, overall);
+		bowling->economy = ((bowling->runs) * 6) / (bowling->balls);
+		overall->runrate = (overall->totalruns * 6) / overall->balls;
+		if((overall->innings == 2) && (((info->overs * 6) - overall->balls) != 0))
+			overall->reqrate = (overall->target * 6) / ((info->overs * 6) - overall->balls);
+		display(team1, team2, overall, onstrike, offstrike, bowling);
 	}
 
 }	
@@ -279,36 +287,41 @@ void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo
 	}
 	if(bowling->wickets)
 		bowling->strikerate = (bowling->balls) / (bowling->wickets);
-	bowling->economy = ((bowling->runs) * 0.6) / (bowling->overs);
-	overall->runrate = (overall->totalruns * 0.6) / overall->overs;	
+	bowling->economy = ((bowling->runs) * 6) / (bowling->balls);
+	overall->runrate = (float)(overall->totalruns * 6) / overall->balls;	
 	overall->totalruns += runs;
 	overall->partnership = overall->partnership + runs;
 	overall->extras += runs;
 	bowling->extras += runs;
-	if(overall->innings == 2) {
-		overall->target = overall->target - overall->totalruns;
-		overall->reqrate = overall->target / (50 - overall->overs);
+	if((overall->innings == 2)) {
+		overall->target = overall->target - runs;
+		if(((info->overs * 6) - overall->balls) != 0)
+			overall->reqrate = (overall->target * 6) / ((info->overs * 6) - overall->balls);
 	}
 	runs = -1;
 	ab = NULL;
+	overall->pscore = scorepredict(overall, info);
 	if((((bowling->balls) % 6) == 0) && (bowling->balls != 0)) {
 		bowling->overs += 0.4;
 		overall->overs += 0.4;
 		overall->runrate = (overall->totalruns) / overall->overs;
 		bowling->economy = (bowling->runs ) / (bowling->overs);
-		display(team1, team2, overall);
-		if(overall->overs != info->overs) {
+		if((overall->innings == 2) && (info->overs - overall->overs != 0))
+			overall->reqrate = overall->target / (info->overs - overall->overs);
+		display(team1, team2, overall, onstrike, offstrike, bowling);
+		if(overall->balls != (info->overs * 6)) {
 			changebowler(team2);
 			changestrike();
 		}
 	}
 	else
-		display(team1, team2, overall);
+		display(team1, team2, overall, onstrike, offstrike, bowling);
 }	
 void add_runs_with_no_extra(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 	onstrike->runs += runs;
 	bowling->runs += runs;
 	onstrike->balls++;
+	overall->balls++;
 	onstrike->strikerate = ((onstrike->runs) * 100) / (onstrike->balls);
 	if(runs == 0)
 		dot++;
@@ -322,31 +335,37 @@ void add_runs_with_no_extra(batsman *team1, bowler *team2, team *overall, matchi
 	bowling->balls++;
 	if(bowling->wickets)
 		bowling->strikerate = (bowling->balls) / (bowling->wickets);
-	bowling->economy = ((bowling->runs) * 0.6) / (bowling->overs);
+	bowling->economy = ((bowling->runs) * 6) / (bowling->balls);
 	overall->overs += 0.1;
 	if(overall->innings == 2) {
-		overall->target = overall->target - overall->totalruns;
-		overall->reqrate = overall->target / (50 - overall->overs);
+		overall->target = overall->target - runs;
+		if(((info->overs * 6) - overall->balls) != 0)
+			overall->reqrate = (overall->target * 6) / ((info->overs * 6) - overall->balls);
 	}
 	overall->totalruns += runs;
-	overall->runrate = (overall->totalruns * 0.6) / overall->overs;
+	overall->runrate = (float)(overall->totalruns * 6) / overall->balls;
 	overall->partnership = overall->partnership + runs;
 	runs = -1;
+	overall->pscore = scorepredict(overall, info);
 	if((bowling->balls % 6) == 0) {
 		bowling->overs += 0.4;
 		overall->overs += 0.4;
 		overall->runrate = overall->totalruns / overall->overs;
 		bowling->economy = (bowling->runs) / (bowling->overs);
+		if((overall->innings == 2) && (info->overs - overall->overs != 0))
+			overall->reqrate = overall->target / (info->overs - overall->overs);
 		changestrike();
 		if(dot == 6)
 			bowling->maidens++;
 		dot = 0;
-		display(team1, team2, overall);
-		if(overall->overs != info->overs)
+		display(team1, team2, overall, onstrike, offstrike, bowling);
+		if(overall->balls != (info->overs * 6)) {
 			changebowler(team2);
+			changestrike();
+		}
 	}
 	else
-		display(team1, team2, overall);
+		display(team1, team2, overall, onstrike, offstrike, bowling);
 }		 
 void input(char *a) {
 	int i = 0;
@@ -390,6 +409,7 @@ void input(char *a) {
 void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 	char a[4];
 	char *e = "%s";
+	int v;
 	start(overall);
 	in_the_ground(team1);
 	warming_up(team2);
@@ -401,16 +421,17 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 	offstrike = send_batsman(team1, name);
 	taking_guard(onstrike);
 	taking_guard(offstrike);
-	printbat(team1);
-	printbowl(team2);
 	printf("enter name of bowler:\n");		
 	scanf(e, name);	
 	bowling = give_bowl(team2, name);
 	shining_bowl(bowling);
-	while((overall->overs != info->overs) && (overall->wickets != 10)) {     	
-		printf("enter runs made , wicket(w), wide(y), noball(n), extra(e)");		
+	while((overall->balls != (info->overs * 6)) && (overall->wickets != 10)) {
+		printf("%d\n", overall->innings);
+		printf("%d\n", overall->target);     	
+		printf("enter runs made , wicket(w), wide(y), noball(n), extra(e) end inning(esc)");		
 		scanf("%s", a);
-		printf("%s\n", a);
+		if(a[0] == 27)
+			break;
 		input(a);
 		printf("%d", wrong);
 		if(wrong) {
@@ -429,7 +450,35 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 				printf("bowled(b), caught(c), lbw(l), run out(r), retired hurt(h), heatwicket(t), time out(o)");
 				wicket(team1, team2, overall, info);			
 			}
-		}			
+		}
+		if((overall->innings == 2) && overall->target <= 0) 
+			break;			
 	}
-	
+	if(onstrike->status == NULL) {
+		onstrike->status = (char *)malloc(sizeof(char) * 16);
+		strcpy(onstrike->status, " not out ");
+	}
+	if(offstrike->status == NULL) {
+		offstrike->status = (char *)malloc(sizeof(char) * 16);
+		strcpy(offstrike->status, " not out ");
+	}
+	if(overall->wickets != 10) {
+		printf("enter names of remaining players");
+		v = overall->wickets;
+		while(v != (9 - overall->wickets)) {
+			scanf("%s", name);
+			offstrike = send_batsman(team1, name);
+			did_not_bat(offstrike);
+			v++;
+		}
+	}
+	if(overall->innings == 2) {
+		printf("enter result\n");
+		getchar();
+		scanf("%[^\n]", overall->result);
+	}
+	if(overall->innings ==  1) {
+		overall->innings = 2;
+		overall->target = overall->totalruns + 1;
+	}
 }		

@@ -33,6 +33,14 @@ void taking_guard(batsmannode *bat) {
 	bat->four = 0;
 	bat->six = 0;
 }
+void did_not_bat(batsmannode *bat) {
+	bat->runs = -1;
+	bat->balls = -1;
+	bat->strikerate = -1;
+	bat->status = NULL;
+	bat->four = -1;
+	bat->six = -1;
+}	
 void warming_up(bowler *bowl) {
 	bowl->head = NULL;
 	bowl->tail = NULL;
@@ -72,10 +80,9 @@ void start(team *overall) {
 	overall->partnership = 0;
 	overall->lastwicket = NULL;
 	overall->extras = 0;
-	overall->innings = 1;
 	overall->pscore = 0;
 	overall->runrate = 0;
 	overall->reqrate = 0;
-	overall->target = 0;
+	overall->balls = 0;
 	overall->wickets = 0;
 }		

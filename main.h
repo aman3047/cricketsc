@@ -40,6 +40,7 @@ typedef struct matchinfo {
 typedef struct team {
 	int totalruns;
 	float overs;
+	int balls;
 	int partnership;
 	char *lastwicket;
 	int extras;
@@ -49,6 +50,7 @@ typedef struct team {
 	float runrate;
 	int pscore;
 	int wickets;
+	char result[128];
 }team;
 void in_the_ground(batsman *bat);
 batsmannode *send_batsman(batsman *bat, char *name);
@@ -69,9 +71,9 @@ void newbatsman(batsman *team1, char ci);
 void changestrike();
 int scorepredict(team *overall, matchinfo *info);
 bowlernode *searchbowler(bowler *bowl, char *name);
-void display(batsman *team1, bowler *team2, team *overall);
+void display(batsman *team1, bowler *team2, team *overall, batsmannode *onstrike, batsmannode *offstrike, bowlernode *bowling);
 void getinfo(matchinfo *info);
 char menu();
-void printbat(batsman *bat);
-void printbowl(bowler *bowl);
+void printbat(batsman *bat, batsmannode *onstrike, batsmannode *offstrike);
+void printbowl(bowler *bowl, bowlernode *bowling);
 void printinfo(matchinfo *info);

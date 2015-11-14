@@ -7,13 +7,20 @@ char *a = "%[^\n]";
 void move(int x, int y) {
 	printf("\033[%d;%df", y, x);
 }
-void printbat(batsman *bat) {
+void printbat(batsman *bat, batsmannode *onstrike, batsmannode *offstrike) {
 	batsmannode  *temp;
 	temp = bat->head;
 	int x = 16; 
 	while(temp) {
 		//move(0, x);
-		printf("%s\t", temp->name);
+		if(temp == onstrike)
+			printf("%s*\t", temp->name);
+		else
+			printf("%s\t", temp->name);
+		if(temp->runs == -1) {
+			printf("\n");
+			continue;
+		}
 		if(temp->status)
 			printf("%s\t", temp->status);
 		//move(16, x);
@@ -30,13 +37,16 @@ void printbat(batsman *bat) {
 		x++;
 	}
 } 
-void printbowl(bowler *bowl) {
+void printbowl(bowler *bowl, bowlernode *bowling) {
 	bowlernode  *temp;
 	temp = bowl->head;
 	int x = 26;
 	while(temp) {
 		//move(0, x);
-		printf("%s\t", temp->name);
+		if(temp == bowling)
+			printf("%s*\t", temp->name);
+		else 
+			printf("%s\t", temp->name);
 		//move(16, x);
 		printf("%0.1f\t", temp->overs);
 		//move(20, x);
@@ -116,15 +126,15 @@ void printinfo(matchinfo *info) {
 	//move(0, 5);
 	printf("series name: ");
 	//move(13, 5);
-	printf(a, info->sname);
+	printf("%s", info->sname);
 	//move(30, 5);
 	printf("\ntoss: ");
 	//move(37, 5); 
-	printf(a, info->toss);
+	printf("%s", info->toss);
 	//move(0, 7);
 	printf("\nvenue: ");
 	//move(8, 7);
-	printf(a, info->venue);
+	printf("%s", info->venue);
 	//move(25, 7);
 	printf("\ndate: ");
 	//move(33, 7);
@@ -132,16 +142,16 @@ void printinfo(matchinfo *info) {
 	//move(0,9);
 	printf("\numpire1 : ");
 	//move(11, 9);
-	printf(a, info->umpire1);
+	printf("%s", info->umpire1);
 	//move(25, 9);
 	printf("\numpire2 : ");
 	//move(36, 9);
-	printf(a, info->umpire2);
+	printf("%s", info->umpire2);
 	printf("\novers : ");
 	printf("%d", (info->overs));
 	printf("\n");
 } 			 			
-void display(batsman *team1, bowler *team2, team *overall) {
+void display(batsman *team1, bowler *team2, team *overall, batsmannode *onstrike, batsmannode *offstrike, bowlernode *bowling) {
 	//move(0,15);
 	printf("Name of batsman\t");
 	//move(16, 15);
@@ -154,7 +164,7 @@ void display(batsman *team1, bowler *team2, team *overall) {
 	printf("6s\t");
 	//move(32, 15);
 	printf("st\n");
-	printbat(team1);
+	printbat(team1, onstrike, offstrike);
 	//move(0, 25);
 	printf("Name of bowler\t");
 	//move(16, 25);
@@ -171,7 +181,7 @@ void display(batsman *team1, bowler *team2, team *overall) {
 	printf("eco\t");
 	//move(40, 25);
 	printf("st\n");
-	printbowl(team2);
+	printbowl(team2, bowling);
 	printf("totalruns\n");
 	printf("%d/%d (%0.1f)\n",overall->totalruns, overall->wickets, overall->overs);
 	printf("partnership\n");
@@ -192,7 +202,7 @@ void display(batsman *team1, bowler *team2, team *overall) {
 		printf("winning percentage\n");
 		printf("%d\n",overall->pscore);	
 	}
-	else {
+	else {		
 		printf("projected score\n");
 		printf("%d\n",overall->pscore);
 	}
