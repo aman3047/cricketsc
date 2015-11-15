@@ -104,17 +104,20 @@ void newbatsman(batsman *team1, char ci) { /*adds new batsman in batsman list*/
 	else 		
 		on = onstrike = send_batsman(team1, name);
 	taking_guard(on);
-}	
-void changebowler(bowler *team2) { /* changes bowler at the end of over*/
+}
+int x = 28;	
+void changebowler(bowler *team2) { /* changes bowler at the end of over*/	
 	bowlernode *newbowler;
-	move(0, 28);
+	move(0, x);
 	printf("enter name of bowler:\n");
-	move(25, 28);
+	move(25, x);
 	scanf("%s", name);
+	x = 28;
 	newbowler = searchbowler(team2, name);
 	if(newbowler == bowling){ /*if user enters name of current bowler, which not allowed*/
 		move(0, 29);
 		printf("change bowler\n");
+		x = 30;
 		changebowler(team2);
 	}
 	else if(newbowler)
@@ -305,6 +308,7 @@ void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo
 	if(ab[0] == 'e') {
 		bowling->overs += 0.1;
 		bowling->balls++;
+		overall->balls++;
 	}
 	if(bowling->wickets)
 		bowling->strikerate = (bowling->balls) / (bowling->wickets);
@@ -427,7 +431,7 @@ void input(char *a) { /* divides input srting into runs and char, e.g. two extra
 void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) { /*it is main updater function*/
 	char a[4];
 	char *e = "%s";
-	int v;
+	int v, x;
 	system("clear");
 	start(overall);
 	in_the_ground(team1);
@@ -450,19 +454,20 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) { /*i
 	scanf(e, name);	
 	bowling = give_bowl(team2, name);
 	shining_bowl(bowling);
+	x = 27;
 	while((overall->balls != (info->overs * 6)) && (overall->wickets != 10)) {
 		move(0, 26);     	
 		printf("\e[1menter runs made , wicket(w), wide(y), noball(n), extra(e) end inning(esc)"  ANSI_COLOR_RESET);
-		move(0, 27);		
+		move(0, x);		
 		scanf("%s", a);
+		x = 27;
 		if(a[0] == 27)
 			break;
 		input(a);
 		if(wrong) {
 			move(0, 28);
 			printf("\e[1mINVALIND INPUT:"  ANSI_COLOR_RESET);
-			move(0, 27);
-			printf("\t");
+			x = 29;
 			wrong = 0;
 			continue;
 		}
@@ -489,7 +494,7 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) { /*i
 	if(overall->wickets != 10) {
 		move(0, 30);
 		printf("\e[1menter names of remaining players"  ANSI_COLOR_RESET);
-		v = overall->wickets;
+		v = 0;
 		while(v != (9 - overall->wickets)) {
 			scanf("%s", name);
 			offstrike = send_batsman(team1, name);
