@@ -1,3 +1,21 @@
+/*****************************************************************************
+ * Copyright (C) AMAN TADVI amanftadvi@yahoo.co.in
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+ *****************************************************************************/
+
 #include <stdio.h>
 #include <string.h>
 #include "main.h"
@@ -8,9 +26,10 @@ char *ab = NULL;
 int wrong = 0;
 char name[16];
 int dot = 0;
+#define ANSI_COLOR_RESET   "\x1b[0m"
 batsmannode *onstrike, *offstrike;
 bowlernode *bowling;
-bowlernode *searchbowler(bowler *bowl, char *name) {
+bowlernode *searchbowler(bowler *bowl, char *name) { /*searches bowler in the list*/
 	bowlernode *temp;
 	temp = bowl->head;
 	while(temp){
@@ -20,7 +39,7 @@ bowlernode *searchbowler(bowler *bowl, char *name) {
 	}
 	return NULL;
 }
-int scorepredict(team *overall, matchinfo *info) {
+int scorepredict(team *overall, matchinfo *info) { /*predicts score and winnig percentage*/
 	int score;
 	int percent;
 	if(overall->innings == 1) {
@@ -56,22 +75,25 @@ int scorepredict(team *overall, matchinfo *info) {
 		return percent;                        
 	}	
 }
-void changestrike() {
+void changestrike() { /*changes strike*/
 	batsmannode *temp;
 	temp = onstrike;
 	onstrike = offstrike;
 	offstrike = temp;
 }
-void newbatsman(batsman *team1, char ci) {
+void newbatsman(batsman *team1, char ci) { /*adds new batsman in batsman list*/
 	char name[16];
 	char a;
 	batsmannode *on;
-	printf("enter name of new batsman :\n");
+	move(0, 32);
+	printf("enter name of new batsman : ");
+	move(30, 32);
 	scanf("%s", name);
-	printf("ci = %c\n", ci);
 	if((ci == 'c') || (ci == 'r')) {
-		printf("is new batsman on strike ? y/n ");
-		getchar();
+		move(0, 33);
+		printf("is new batsman on strike ? y/n "); /*in the case of catch and runout , we cannot assume batman is onstrike/offstrike*/ 
+		getchar();				   /*as batman may have crossed ends*/		
+		move(33, 33);
 		a = getchar();
 		if(a == 'y') {
 			on = onstrike = send_batsman(team1, name);
@@ -83,12 +105,15 @@ void newbatsman(batsman *team1, char ci) {
 		on = onstrike = send_batsman(team1, name);
 	taking_guard(on);
 }	
-void changebowler(bowler *team2) {
+void changebowler(bowler *team2) { /* changes bowler at the end of over*/
 	bowlernode *newbowler;
+	move(0, 28);
 	printf("enter name of bowler:\n");
+	move(25, 28);
 	scanf("%s", name);
 	newbowler = searchbowler(team2, name);
-	if(newbowler == bowling){
+	if(newbowler == bowling){ /*if user enters name of current bowler, which not allowed*/
+		move(0, 29);
 		printf("change bowler\n");
 		changebowler(team2);
 	}
@@ -99,7 +124,7 @@ void changebowler(bowler *team2) {
 		shining_bowl(bowling);
 	}
 }
-void afterwicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
+void afterwicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) { /*updates bowling info sfter fall of wickets*/
 	bowling->overs += 0.1;
 	bowling->balls++;
 	overall->overs += 0.1;
@@ -114,7 +139,7 @@ void afterwicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) 
 		overall->overs += 0.4;
 		overall->runrate = (overall->totalruns) / overall->overs;
 		bowling->economy = (bowling->runs ) / (bowling->overs);
-		display(team1, team2, overall, onstrike, offstrike, bowling);
+		display(team1, team2, overall, onstrike, offstrike, bowling, info);
 		if((overall->innings == 2)  && (info->overs - overall->overs != 0))
 			overall->reqrate = overall->target / (info->overs - overall->overs);
 		if(overall->balls != (info->overs * 6)) {
@@ -127,11 +152,11 @@ void afterwicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) 
 		overall->runrate = (overall->totalruns * 6) / overall->balls;
 		if((overall->innings == 2) && (((info->overs * 6) - overall->balls) != 0))
 			overall->reqrate = (overall->target * 6) / ((info->overs * 6) - overall->balls);
-		display(team1, team2, overall, onstrike, offstrike, bowling);
+		display(team1, team2, overall, onstrike, offstrike, bowling, info);
 	}
 
 }	
-void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
+void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) { /* updates info about wicket fall*/
 	char s[64];
 	char *e, *f, *b, *d, *c, *p;
 	char cj;
@@ -152,7 +177,9 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 			f = (char *)malloc((sizeof(char)) * 16);
 			b = (char *)malloc((sizeof(char)) * 4);
 			b = " b ";
+			move(0, 30);
 			printf("enter name of catcher\n");
+			move(0, 31);
 			scanf("%s", f);
 			strcpy(s, c);
 			strcat(s, f);
@@ -247,10 +274,11 @@ void wicket(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 			afterwicket(team1, team2, overall, info);
 			break;
 		default :
-			printf("invalid input\n");
+			move(0, 28);
+			printf("invalid input");
 	}
 }				 
-void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo *info) {	
+void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo *info) { /*as function name suggets, it updates total info*/	
 	if((ab[0] == 'n') && runs > 1)	
 		onstrike->runs += runs - 1;
 	bowling->runs += runs;
@@ -301,14 +329,14 @@ void add_runs_with_extra(batsman *team1, bowler *team2, team *overall, matchinfo
 		bowling->economy = (bowling->runs ) / (bowling->overs);
 		if((overall->innings == 2) && (info->overs - overall->overs != 0))
 			overall->reqrate = overall->target / (info->overs - overall->overs);
-		display(team1, team2, overall, onstrike, offstrike, bowling);
+		display(team1, team2, overall, onstrike, offstrike, bowling, info);
 		if(overall->balls != (info->overs * 6)) {
 			changebowler(team2);
 			changestrike();
 		}
 	}
 	else
-		display(team1, team2, overall, onstrike, offstrike, bowling);
+		display(team1, team2, overall, onstrike, offstrike, bowling, info);
 }	
 void add_runs_with_no_extra(batsman *team1, bowler *team2, team *overall, matchinfo *info) {
 	onstrike->runs += runs;
@@ -351,16 +379,16 @@ void add_runs_with_no_extra(batsman *team1, bowler *team2, team *overall, matchi
 		if(dot == 6)
 			bowling->maidens++;
 		dot = 0;
-		display(team1, team2, overall, onstrike, offstrike, bowling);
+		display(team1, team2, overall, onstrike, offstrike, bowling, info);
 		if(overall->balls != (info->overs * 6)) {
 			changebowler(team2);
 			changestrike();
 		}
 	}
 	else
-		display(team1, team2, overall, onstrike, offstrike, bowling);
+		display(team1, team2, overall, onstrike, offstrike, bowling, info);
 }		 
-void input(char *a) {
+void input(char *a) { /* divides input srting into runs and char, e.g. two extras are scored(2e), then it divides 2e into 2 and e*/
 	int i = 0;
 	int j = 0;
 	int k = 0;
@@ -395,40 +423,46 @@ void input(char *a) {
 		}
 	}
 	ab[j] = '\0';
-	printf("input : %s\n", ab);
-	printf("%c\n", ab[0]);
-	printf("%d\n", runs);
 }			
-void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
+void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) { /*it is main updater function*/
 	char a[4];
 	char *e = "%s";
 	int v;
+	system("clear");
 	start(overall);
 	in_the_ground(team1);
 	warming_up(team2);
-	printf("enter name of batsman on stike:\n");
+	move(10, 11);
+	printf("\e[1menter name of batsman on stike: " ANSI_COLOR_RESET);
+	move(45, 11);
 	scanf(e, name);
 	onstrike = send_batsman(team1, name);
-	printf("enter name of batsman off strike:\n");
+	move(10, 12);
+	printf("\e[1menter name of batsman off strike:"  ANSI_COLOR_RESET);
+	move(45, 12);
 	scanf(e, name);
 	offstrike = send_batsman(team1, name);
 	taking_guard(onstrike);
 	taking_guard(offstrike);
-	printf("enter name of bowler:\n");		
+	move(10, 13);
+	printf("\e[1menter name of bowler: "  ANSI_COLOR_RESET);
+	move(35, 13);		
 	scanf(e, name);	
 	bowling = give_bowl(team2, name);
 	shining_bowl(bowling);
 	while((overall->balls != (info->overs * 6)) && (overall->wickets != 10)) {
-		printf("%d\n", overall->innings);
-		printf("%d\n", overall->target);     	
-		printf("enter runs made , wicket(w), wide(y), noball(n), extra(e) end inning(esc)");		
+		move(0, 26);     	
+		printf("\e[1menter runs made , wicket(w), wide(y), noball(n), extra(e) end inning(esc)"  ANSI_COLOR_RESET);
+		move(0, 27);		
 		scanf("%s", a);
 		if(a[0] == 27)
 			break;
 		input(a);
-		printf("%d", wrong);
 		if(wrong) {
-			printf("INVALIND INPUT:\n");
+			move(0, 28);
+			printf("\e[1mINVALIND INPUT:"  ANSI_COLOR_RESET);
+			move(0, 27);
+			printf("\t");
 			wrong = 0;
 			continue;
 		}
@@ -436,11 +470,12 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 			add_runs_with_no_extra(team1, team2, overall, info);
 		else {			
 			if(ab[0] == 'y' || ab[0] == 'n' || ab[0] == 'e') {
-				printf("yahoo\n");
 				add_runs_with_extra(team1, team2, overall, info);
 			}
 			else {
-				printf("bowled(b), caught(c), lbw(l), run out(r), retired hurt(h), heatwicket(t), time out(o)");
+				move(0,28);
+				printf("\e[1mbowled(b), caught(c), lbw(l), run out(r), retired hurt(h), heatwicket(t), time out(o)"  ANSI_COLOR_RESET);
+				move(0, 29);
 				wicket(team1, team2, overall, info);			
 			}
 		}
@@ -452,7 +487,8 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 	if(strcmp(offstrike->status, " batting ") == 0) 
 		strcpy(offstrike->status, " not out ");
 	if(overall->wickets != 10) {
-		printf("enter names of remaining players");
+		move(0, 30);
+		printf("\e[1menter names of remaining players"  ANSI_COLOR_RESET);
 		v = overall->wickets;
 		while(v != (9 - overall->wickets)) {
 			scanf("%s", name);
@@ -461,11 +497,15 @@ void update(team *overall, batsman *team1, bowler *team2, matchinfo *info) {
 			v++;
 		}
 	}
+	system("clear");
 	if(overall->innings == 2) {
-		printf("enter result\n");
+		move(0, 27);
+		printf("\e[1menter result"  ANSI_COLOR_RESET);
 		getchar();
+		move(13, 28);
 		scanf("%[^\n]", overall->result);
 	}
+	system("clear");
 	if(overall->innings ==  1) {
 		overall->innings = 2;
 		overall->target = overall->totalruns + 1;

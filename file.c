@@ -1,12 +1,31 @@
+/*****************************************************************************
+ * Copyright (C) AMAN TADVI amanftadvi@yahoo.co.in
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+ *****************************************************************************/
+
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
 #include "main.h"
-void write(char *s, team *overall, batsman *team1, bowler *team2, matchinfo *info) {
+#define ANSI_COLOR_RESET   "\x1b[0m"
+void write(char *s, team *overall, batsman *team1, bowler *team2, matchinfo *info) { /* writes data to file*/
 	FILE *write;
-	write = fopen(s, "w");
+	write = fopen(s, "a+");
 	if(write == NULL) {
 		perror("error :");
 		return;
@@ -32,10 +51,9 @@ void write(char *s, team *overall, batsman *team1, bowler *team2, matchinfo *inf
 		fwrite(q, sizeof(bowlernode), 1, write);
 		q = q->next;
 	}
-	fwrite(overall->result, sizeof(char), 64, write);
 	fclose(write);	
 }
-void openfile(char *s) {
+void openfile(char *s) { /*opens new score sheet*/
 	team overall;
 	batsman team1, team3;
 	bowler team2, team4;
@@ -51,13 +69,13 @@ void openfile(char *s) {
 		return;
 	}
 	while(candy != EOF) {
-        	candy = fgetc(list);
+        	candy = fgetc(list);/*it is checked here if file name already exists or not*/
         	a[i] = candy;
         	if(candy == '\n') {
                 	a[i] = '\0';
                 	i = -1;
                 	if(strcmp(a, s) == 0) {
-                		printf("File already exists!");
+                		printf("File already exists!\n");
 				scanf("%s", s);
 				strcat(s, ".txt");
                 		break;
@@ -86,13 +104,13 @@ void openfile(char *s) {
 	write(s, &overall, &team3, &team4, &info);
 	fclose(file);	
 }
-void searchfile(char *s) {
+void searchfile(char *s) { /* searches file and after reading file prints data*/ 
 	team overall;
 	batsmannode bat;
 	bowlernode bowl;
 	matchinfo info;
-	char result[64];
-	int l = 0, m = 0;
+	int l, m;
+	int i = 0;
 	strcat(s, ".txt");
 	FILE *search;
 	search = fopen(s, "r");
@@ -101,92 +119,88 @@ void searchfile(char *s) {
 		return;
 	}
 	rewind(search);
-	fread(&info, sizeof(matchinfo), 1, search);
-	printinfo(&info);
-	fread(&overall, sizeof(team), 1, search);
-	printf("totalruns\n");
-	printf("%d/%d (%0.1f)\n",overall.totalruns, overall.wickets, overall.overs);
-	printf("partnership\n");
-	printf("%d\n",overall.partnership);
-	printf("extras\n");
-	printf("%d\n",overall.extras);
-	printf("innings\n");
-	printf("%d\n",overall.innings);
-	printf("runrate\n");
-	printf("%0.2f\n",overall.runrate);
-	printf("Name of batsman\t");
-	//move(16, 15);
-	printf("r\t");
-	//move(20, 15);
-	printf("b\t");
-	//move(24, 15);
-	printf("4s\t");
-	//move(28, 15);
-	printf("6s\t");
-	//move(32, 15);
-	printf("st\n");
-	fread(&l, sizeof(int), 1, search);
-	while(l != m) {
-        	fread(&bat, sizeof(batsmannode), 1, search);
-		printf("%s\t", bat.name);
-		m++;
-		if(bat.runs == -1) {
-			printf("\n");
-			continue;
+	while(i < 2) {
+		l = 0;
+		m = 0;
+		fread(&info, sizeof(matchinfo), 1, search);
+		if(i == 0) {
+			printf("\e[1mseries name: " ANSI_COLOR_RESET);
+			printf("%s \n", info.sname);
+			printf("\e[1mteam 1: " ANSI_COLOR_RESET);
+			printf("%s\n", info.teama);
+			printf("\e[1mteam 2: " ANSI_COLOR_RESET);
+			printf("%s\n", info.teamb);
+			printf("\e[1mtoss: " ANSI_COLOR_RESET);
+			printf("%s\n", info.toss);
+			printf("\e[1mvenue: " ANSI_COLOR_RESET);
+			printf("%s\n", info.venue);
+			printf("\e[1mdate: " ANSI_COLOR_RESET);
+			printf("%s\n",info.date);
+			printf("\e[1mumpire1 : " ANSI_COLOR_RESET);
+			printf("%s\n", info.umpire1);
+			printf("\e[1mumpire2 : " ANSI_COLOR_RESET);
+			printf("%s\n", info.umpire2);
+			printf("\e[1movers : ");
+			printf("%d\n", (info.overs));
 		}
-		printf("%s\t", bat.status);
-		//move(16, x);
-		printf("%d\t", bat.runs);
-		//move(20, x);
-		printf("%d\t", bat.balls);
-		//move(24, x);
-		printf("%d\t", bat.four);
-		//move(28, x);
-		printf("%d\t", bat.six);
-		//move(32, x);
-		printf("%0.2f\n", bat.strikerate);
+		fread(&overall, sizeof(team), 1, search);
+		printf("\e[1m%d/%d (%0.1f)\n", overall.totalruns, overall.wickets, overall.overs);
+		printf("partnership ");
+		printf("%d\t",overall.partnership);
+		printf("extras ");
+		printf("%d\n",overall.extras);
+		printf("innings ");
+		printf("%d\t",overall.innings);
+		printf("runrate");
+		printf("%0.2f\n",overall.runrate);
+		printf("batsman\t\t");
+		printf("r\t");
+		printf("b\t");
+		printf("4s\t");
+		printf("6s\t");
+		printf("st\n" ANSI_COLOR_RESET);
+		fread(&l, sizeof(int), 1, search);
+		while(l != m) {
+			fread(&bat, sizeof(batsmannode), 1, search);
+			printf("%s\t", bat.name);
+			m++;
+			if(bat.runs == -1) {
+				printf("\n");
+				continue;
+			}
+			printf("%s\t", bat.status);
+			printf("%d\t", bat.runs);
+			printf("%d\t", bat.balls);
+			printf("%d\t", bat.four);
+			printf("%d\t", bat.six);
+			printf("%0.2f\n", bat.strikerate);
+		}
+		fread(&l, sizeof(int), 1, search);
+		printf("\e[1mName of bowler\t");
+		printf("o\t");
+		printf("r\t");
+		printf("w\t");
+		printf("m\t");
+		printf("e\t");
+		printf("eco\t");
+		printf("st\n" ANSI_COLOR_RESET);
+		m = 0;
+		while(l != m) {
+			fread(&bowl, sizeof(bowlernode), 1, search);
+			printf("%s\t", bowl.name);
+			printf("%0.1f\t", bowl.overs);
+			printf("%d\t", bowl.runs);
+			printf("%d\t", bowl.wickets);
+			printf("%d\t", bowl.maidens);
+			printf("%d\t", bowl.extras);
+			printf("%0.2f ", bowl.economy);
+			if(bowl.strikerate)
+				printf("%0.2f", bowl.strikerate);
+			printf("\n");
+			m++;
+		}
+		i++;
 	}
-	fread(&l, sizeof(int), 1, search);
-	//move(0, 25);
-	printf("Name of bowler\t");
-	//move(16, 25);
-	printf("o\t");
-	//move(20, 25);
-	printf("r\t");
-	//move(24, 25);
-	printf("w\t");
-	//move(28, 25);
-	printf("m\t");
-	//move(32, 25);
-	printf("e\t");
-	//move(36, 25);
-	printf("eco\t");
-	//move(40, 25);
-	printf("st\n");
-	m = 0;
-	while(l != m) {
-		fread(&bowl, sizeof(bowlernode), 1, search);
-		printf("%s\t", bowl.name);
-		//move(16, x);
-		printf("%0.1f\t", bowl.overs);
-		//move(20, x);
-		printf("%d\t", bowl.runs);
-		//move(24, x);
-		printf("%d\t", bowl.wickets);
-		//move(28, x);
-		printf("%d\t", bowl.maidens);
-		//move(32, x);
-		printf("%d\t", bowl.extras);
-		//move(36, x);
-		printf("%0.2f\t", bowl.economy);
-		//move(40, x);
-		if(bowl.strikerate)
-			printf("%0.2f\n", bowl.strikerate);
-		m++;
-	}
-	int u = fread(result, sizeof(char), 64, search);
-	result[u] = '\0';
-	printf("%s\n", result);
+	printf("\e[1m%s\n" ANSI_COLOR_RESET, overall.result);
 	fclose(search);
-	main();
 }
